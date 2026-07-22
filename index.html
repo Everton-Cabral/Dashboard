@@ -78,7 +78,7 @@
   /* ---------- Layout ---------- */
   .container{ max-width:1440px; margin:0 auto; padding:20px 28px 60px; }
 
-  /* ---------- Sync Data Card (Substituiu o Upload) ---------- */
+  /* ---------- Sync Data Card ---------- */
   .upload-card{
     background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
     padding:14px 18px; margin:-30px 0 16px; position:relative; z-index:6;
@@ -120,30 +120,6 @@
   }
   input[type=date]:focus, input[type=text].search:focus{ outline:2px solid var(--orange-2); outline-offset:1px; background:var(--white); }
   .chip-group{ display:flex; flex-wrap:wrap; gap:6px; }
-  .chip-toggle{
-    border:1px solid var(--gray-200); background:var(--gray-50); color:var(--gray-600);
-    padding:6px 11px; border-radius:20px; font-size:12px; cursor:pointer; font-weight:600;
-    transition:all .12s ease; user-select:none;
-  }
-  .chip-toggle:hover{ border-color:var(--orange-2); }
-  .chip-toggle.active{ background:var(--navy); color:var(--white); border-color:var(--navy); }
-  .placa-box{ position:relative; }
-  .placa-selected{ display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
-  .placa-tag{
-    background:var(--orange); color:var(--white); font-size:11.5px; font-weight:700;
-    padding:4px 8px 4px 10px; border-radius:14px; display:flex; align-items:center; gap:6px;
-  }
-  .placa-tag button{
-    background:rgba(255,255,255,.3); border:none; color:var(--white); width:15px;height:15px; border-radius:50%;
-    cursor:pointer; font-size:10px; line-height:1; display:flex; align-items:center; justify-content:center; padding:0;
-  }
-  .placa-suggest{
-    position:absolute; top:100%; left:0; right:0; background:var(--white); border:1px solid var(--gray-200);
-    border-radius:10px; box-shadow:var(--shadow); max-height:220px; overflow-y:auto; z-index:20; margin-top:4px; display:none;
-  }
-  .placa-suggest.show{ display:block; }
-  .placa-suggest div{ padding:8px 12px; font-size:13px; cursor:pointer; }
-  .placa-suggest div:hover{ background:var(--gray-100); }
 
   /* ---------- Dropdown multi-select ---------- */
   .dropdown-box{ position:relative; }
@@ -154,28 +130,6 @@
   }
   .dropdown-toggle:hover{ border-color:var(--orange-2); }
   .dropdown-toggle::after{ content:"▾"; color:var(--gray-400); font-size:11px; flex:none; }
-  .dropdown-panel{
-    display:none; position:absolute; top:100%; left:0; right:0; margin-top:4px; z-index:20;
-    background:var(--white); border:1px solid var(--gray-200); border-radius:10px; box-shadow:var(--shadow);
-    padding:10px; min-width:260px;
-  }
-  .dropdown-panel.show{ display:block; }
-  .dropdown-search{ margin-bottom:8px; }
-  .dropdown-actions{ display:flex; gap:8px; margin-bottom:8px; }
-  .dropdown-action{
-    background:var(--gray-50); border:1px solid var(--gray-200); color:var(--gray-600);
-    padding:5px 10px; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer;
-  }
-  .dropdown-action:hover{ border-color:var(--orange-2); color:var(--orange); }
-  .dropdown-list{ max-height:230px; overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
-  .dropdown-item{
-    display:flex; align-items:center; gap:8px; padding:6px 6px; border-radius:6px; cursor:pointer; font-size:12.5px; color:var(--gray-800);
-  }
-  .dropdown-item:hover{ background:var(--gray-50); }
-  .dropdown-item input{ flex:none; accent-color:var(--orange); width:14px; height:14px; cursor:pointer; }
-  .dropdown-item span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .dropdown-empty{ font-size:12px; color:var(--gray-400); padding:10px 4px; text-align:center; }
-  .filter-actions{ display:flex; align-items:flex-end; }
   .btn-clear{
     background:var(--white); border:1px solid var(--gray-300); color:var(--gray-600);
     padding:9px 16px; border-radius:9px; font-size:12.5px; font-weight:700; cursor:pointer;
@@ -199,31 +153,6 @@
   .tab-panel.active{ display:block; }
   @keyframes fadein{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
 
-  /* ---------- KPIs & Cards ---------- */
-  .kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:20px; }
-  .kpi-card{
-    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 18px;
-    border-left:4px solid var(--orange);
-  }
-  .kpi-card .val{ font-size:26px; font-weight:800; color:var(--navy); line-height:1.1; }
-  .kpi-card .lbl{ font-size:11.5px; color:var(--gray-600); font-weight:600; margin-top:5px; }
-  .kpi-card.c-teal{ border-left-color:var(--teal); }
-  .kpi-card.c-amber{ border-left-color:var(--amber); }
-  .kpi-card.c-red{ border-left-color:var(--red); }
-  .kpi-card.c-navy{ border-left-color:var(--navy); }
-  .kpi-card.c-purple{ border-left-color:var(--purple); }
-
-  .grid2{ display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px; }
-  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
-  .grid2b{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
-  @media(max-width:980px){ .grid2,.grid3,.grid2b{ grid-template-columns:1fr; } }
-
-  .card{ background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 18px 14px; }
-  .card h3{ margin:0 0 2px; font-size:14.5px; color:var(--gray-800); font-weight:700; }
-  .card .card-sub{ margin:0 0 12px; font-size:11.5px; color:var(--gray-400); font-weight:500; }
-  .card canvas{ width:100%; display:block; }
-  .legend{ display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:10px; }
-
   /* ---------- Table ---------- */
   .table-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; flex-wrap:wrap; }
   .table-toolbar .count{ font-size:12.5px; color:var(--gray-600); font-weight:600; }
@@ -238,13 +167,9 @@
   }
   tbody td{ padding:9px 12px; border-bottom:1px solid var(--gray-100); color:var(--gray-800); white-space:nowrap; }
   tbody tr:hover{ background:var(--gray-50); }
-  .pager{ display:flex; justify-content:center; gap:6px; padding:14px; }
-  .pager button{ border:1px solid var(--gray-200); background:var(--white); padding:6px 12px; border-radius:7px; font-size:12px; cursor:pointer; font-weight:600; color:var(--gray-600); }
-  .pager button.active{ background:var(--navy); color:var(--white); border-color:var(--navy); }
 
   footer.foot{ text-align:center; padding:26px 0 10px; font-size:11.5px; color:var(--gray-400); }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -259,8 +184,7 @@
     </div>
     <div class="top-meta">
       <div class="meta-chip"><b id="metaTotal">–</b><span>Registros</span></div>
-      <div class="meta-chip"><b id="metaPeriodo">–</b><span>Período da base</span></div>
-      <div class="meta-chip"><b id="metaClientes">–</b><span>Clientes</span></div>
+      <div class="meta-chip"><b id="metaStatus">Pronto</b><span>Status</span></div>
     </div>
   </div>
 </header>
@@ -271,173 +195,136 @@
   <div class="upload-card">
     <div class="upload-row">
       <div class="upload-text">
-        <h3>Sincronização de Dados</h3>
-        <p id="uploadStatus">Base carregada online: <span id="uploadCount">0</span> registros</p>
+        <h3>Sincronização com Google Sheets</h3>
+        <p id="uploadStatus">Registros carregados: <span id="uploadCount">0</span></p>
       </div>
       <div class="upload-controls">
         <button class="btn-update" id="btnUpdateData">
-          🔄 Atualizar Planilha Online
+          🔄 Sincronizar Agora
         </button>
       </div>
     </div>
     <div class="upload-msg" id="uploadMsg"></div>
   </div>
 
-  <!-- FILTERS -->
-  <div class="filters">
-    <div class="filters-grid">
-      <div class="filter-block">
-        <label>Intervalo — Parada na Oficina</label>
-        <div class="date-row">
-          <input type="date" id="fDateFrom">
-          <input type="date" id="fDateTo">
-        </div>
-      </div>
-      <div class="filter-block placa-box">
-        <label>Placa do Veículo</label>
-        <input type="text" class="search" id="fPlacaSearch" placeholder="Buscar placa…" autocomplete="off">
-        <div class="placa-suggest" id="placaSuggest"></div>
-        <div class="placa-selected" id="placaSelected"></div>
-      </div>
-      <div class="filter-block dropdown-box">
-        <label>Fornecedor (Oficina)</label>
-        <button type="button" class="dropdown-toggle" id="fFornecedorToggle">Todos selecionados</button>
-        <div class="dropdown-panel" id="fFornecedorPanel">
-          <input type="text" class="search dropdown-search" id="fFornecedorFilterSearch" placeholder="Filtrar lista…" autocomplete="off">
-          <div class="dropdown-actions">
-            <button type="button" class="dropdown-action" id="fFornecedorAll">Selecionar todos</button>
-            <button type="button" class="dropdown-action" id="fFornecedorNone">Limpar seleção</button>
-          </div>
-          <div class="dropdown-list" id="fFornecedorList"></div>
-        </div>
-      </div>
-      <div class="filter-block">
-        <label>Tipo de Manutenção</label>
-        <div class="chip-group" id="fTipoManut"></div>
-      </div>
-      <div class="filter-block">
-        <label>Cliente</label>
-        <div class="chip-group" id="fCliente"></div>
-      </div>
-      <div class="filter-block">
-        <label>Status Parada (GEO)</label>
-        <div class="chip-group" id="fStatusGeo"></div>
-      </div>
-      <div class="filter-block">
-        <label>Controlador Frota Vamos</label>
-        <div class="chip-group" id="fControlador"></div>
-      </div>
-      <div class="filter-block filter-actions">
-        <button class="btn-clear" id="btnClear">Limpar filtros</button>
-      </div>
-    </div>
-    <div class="active-count" id="activeCount"></div>
+  <!-- TABELA DE EXIBIÇÃO DOS DADOS -->
+  <div class="table-toolbar">
+    <div class="count" id="tableCount">0 registros encontrados</div>
+    <button class="btn-export" id="btnExport">Exportar CSV</button>
+  </div>
+  <div class="table-wrap">
+    <table id="detailTable">
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="visao">Visão Geral</button>
-    <button class="tab-btn" data-tab="pareto">Pareto &amp; Tempos</button>
-    <button class="tab-btn" data-tab="frota">Frota, Cliente &amp; Fornecedores</button>
-    <button class="tab-btn" data-tab="parados">🚧 Veículos Parados em Oficina</button>
-    <button class="tab-btn" data-tab="detalhe">Detalhamento</button>
-  </div>
-
-  <!-- TAB PANELS -->
-  <div class="tab-panel active" id="tab-visao">
-    <div class="kpi-grid" id="kpiGrid"></div>
-    <div class="grid2">
-      <div class="card">
-        <h3>Evolução mensal de paradas</h3>
-        <p class="card-sub">Volume de OS por mês e tempo médio</p>
-        <canvas id="chartMonthly"></canvas>
-      </div>
-      <div class="card">
-        <h3>Distribuição por Tipo de Manutenção</h3>
-        <canvas id="chartTipoDonut"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="tab-panel" id="tab-detalhe">
-    <div class="table-toolbar">
-      <div class="count" id="tableCount">–</div>
-      <button class="btn-export" id="btnExport">Exportar CSV</button>
-    </div>
-    <div class="table-wrap">
-      <table id="detailTable">
-        <thead>
-          <tr>
-            <th>Placa</th>
-            <th>Cliente</th>
-            <th>Tipo Manutenção</th>
-            <th>Parada Oficina</th>
-            <th>Entrega Cliente</th>
-            <th>Status GEO</th>
-            <th>Fornecedor</th>
-          </tr>
-        </thead>
-        <tbody id="detailBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <footer class="foot">Painel sincronizado via Planilha Online · Grupo Vamos</footer>
+  <footer class="foot">Painel sincronizado via Google Sheets · Grupo Vamos</footer>
 </div>
 
 <script>
-// CONFIGURAÇÃO DA PLANILHA ONLINE
-// Subsitua a URL abaixo pela URL de exportação/publicação da sua planilha em CSV ou XLSX
-const ONLINE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR-EXEMPLO/pub?output=xlsx";
+// URL da sua planilha publicada em CSV no Google Sheets
+const ONLINE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vStnBao7OMUZCWPFCIzAJW3j3992eRaQKv4VK0ORlff2GGpnSkZ-iKG8fw2DvSrCxbkspWTAlL3A44Q/pub?output=csv";
 
 let DATA = [];
 
-// Função responsável por buscar os dados da planilha via Web
+// Converte texto CSV para Array de Objetos JSON
+function parseCSV(csvText) {
+  const lines = csvText.split('\n').filter(line => line.trim() !== '');
+  if (lines.length === 0) return [];
+
+  // Extrai o cabeçalho
+  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+  
+  const results = [];
+  for (let i = 1; i < lines.length; i++) {
+    // Trata colunas separadas por vírgula
+    const currentLine = lines[i].split(',').map(item => item.trim().replace(/^"|"$/g, ''));
+    if (currentLine.length === headers.length) {
+      let obj = {};
+      for (let j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentLine[j];
+      }
+      results.push(obj);
+    }
+  }
+  return results;
+}
+
+// Consulta e baixa a planilha online
 async function carregarPlanilhaOnline() {
   const msgEl = document.getElementById('uploadMsg');
   const btnEl = document.getElementById('btnUpdateData');
   
   msgEl.className = "upload-msg";
-  msgEl.innerText = "Consultando e baixando dados da planilha online...";
+  msgEl.innerText = "Consultando e baixando dados do Google Sheets...";
   btnEl.disabled = true;
 
   try {
     const response = await fetch(ONLINE_SHEET_URL);
-    if (!response.ok) throw new Error("Falha ao acessar o servidor da planilha.");
+    if (!response.ok) throw new Error("Não foi possível conectar ao Google Sheets.");
     
-    const arrayBuffer = await response.arrayBuffer();
-    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-    
-    // Pega a primeira aba da planilha
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    
-    // Converte para formato JSON
-    DATA = XLSX.utils.sheet_to_json(worksheet);
+    const csvText = await response.text();
+    DATA = parseCSV(csvText);
     
     msgEl.className = "upload-msg ok";
-    msgEl.innerText = "Planilha online atualizada com sucesso!";
-    document.getElementById('uploadCount').innerText = DATA.length;
+    msgEl.innerText = "Sincronização realizada com sucesso!";
     
-    inicializarPainel();
+    document.getElementById('uploadCount').innerText = DATA.length;
+    document.getElementById('metaTotal').innerText = DATA.length;
+    
+    renderizarTabela();
   } catch (error) {
     console.error(error);
     msgEl.className = "upload-msg err";
-    msgEl.innerText = "Erro ao carregar a planilha online. Verifique a URL configurada.";
+    msgEl.innerText = "Erro ao carregar a planilha online. Verifique se o link está publicado corretamente.";
   } finally {
     btnEl.disabled = false;
   }
 }
 
-function inicializarPainel() {
-  document.getElementById('metaTotal').innerText = DATA.length;
-  // Lógica de renderização de gráficos, filtros e tabelas...
+// Renderiza os dados baixados na tabela
+function renderizarTabela() {
+  const headEl = document.getElementById('tableHead');
+  const bodyEl = document.getElementById('tableBody');
+  const countEl = document.getElementById('tableCount');
+
+  headEl.innerHTML = '';
+  bodyEl.innerHTML = '';
+
+  if (DATA.length === 0) {
+    countEl.innerText = "Nenhum registro encontrado.";
+    return;
+  }
+
+  const columns = Object.keys(DATA[0]);
+
+  // Monta cabeçalho
+  let headHtml = '<tr>';
+  columns.forEach(col => {
+    headHtml += `<th>${col}</th>`;
+  });
+  headHtml += '</tr>';
+  headEl.innerHTML = headHtml;
+
+  // Monta corpo (exibindo até os 100 primeiros para performance)
+  let bodyHtml = '';
+  const maxRows = Math.min(DATA.length, 100);
+  for (let i = 0; i < maxRows; i++) {
+    bodyHtml += '<tr>';
+    columns.forEach(col => {
+      bodyHtml += `<td>${DATA[i][col] || ''}</td>`;
+    });
+    bodyHtml += '</tr>';
+  }
+  bodyEl.innerHTML = bodyHtml;
+  countEl.innerText = `Exibindo ${maxRows} de ${DATA.length} registros`;
 }
 
-// Botão de Atualização Manual da Planilha Online
+// Botão de atualização manual
 document.getElementById('btnUpdateData').addEventListener('click', carregarPlanilhaOnline);
 
-// Inicialização Automática ao carregar a página
+// Inicialização automática ao abrir a página
 window.addEventListener('DOMContentLoaded', () => {
   carregarPlanilhaOnline();
 });
