@@ -1,333 +1,182 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Acompanhamento de Manutenção de Veículos — Grupo Vamos</title>
-<style>
-  :root{
-    --navy:#0A1F44;
-    --navy-2:#12295A;
-    --navy-3:#1D3A6E;
-    --orange:#F2661D;
-    --orange-2:#FF8A4C;
-    --amber:#FFB238;
-    --teal:#249688;
-    --red:#E5484D;
-    --purple:#6B4E9E;
-    --gray-50:#F5F6FA;
-    --gray-100:#EDEFF4;
-    --gray-200:#DEE2EA;
-    --gray-300:#C8CEDA;
-    --gray-400:#9AA3B2;
-    --gray-600:#5B6472;
-    --gray-800:#2B3242;
-    --white:#FFFFFF;
-    --shadow: 0 1px 2px rgba(10,31,68,.05), 0 6px 20px rgba(10,31,68,.06);
-    --radius: 14px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--gray-50);
-    color:var(--gray-800);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;}
-
-  /* ---------- Header ---------- */
-  header.top{
-    background:linear-gradient(120deg,var(--navy) 0%,var(--navy-3) 65%,var(--navy-2) 100%);
-    color:var(--white);
-    padding:22px 28px 20px;
-    position:relative;
-    overflow:hidden;
-  }
-  header.top::after{
-    content:"";
-    position:absolute; left:0; right:0; bottom:0; height:5px;
-    background:linear-gradient(90deg,var(--orange),var(--amber) 60%,var(--orange-2));
-  }
-  .top-inner{
-    display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;
-    max-width:1440px; margin:0 auto;
-  }
-  .brand-row{display:flex; align-items:center; gap:12px;}
-  .brand-mark{
-    width:38px;height:38px;border-radius:10px;
-    background:var(--orange);
-    display:flex;align-items:center;justify-content:center;
-    font-weight:800; font-size:17px; color:var(--navy); flex:none;
-    box-shadow:0 3px 10px rgba(242,102,29,.45);
-  }
-  h1{ font-size:21px; margin:0; font-weight:700; letter-spacing:.2px; }
-  .subtitle{ margin:3px 0 0; font-size:12.5px; color:rgba(255,255,255,.68); font-weight:500; }
-  .top-meta{ display:flex; gap:10px; flex-wrap:wrap; }
-  .meta-chip{
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:10px;
-    padding:8px 14px;
-    text-align:left;
-    min-width:108px;
-  }
-  .meta-chip b{ display:block; font-size:16px; font-weight:700; color:var(--white); }
-  .meta-chip span{ font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,.6); }
-
-  /* ---------- Layout ---------- */
-  .container{ max-width:1440px; margin:0 auto; padding:20px 28px 60px; }
-
-  /* ---------- Sync Data Card ---------- */
-  .upload-card{
-    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
-    padding:14px 18px; margin:-30px 0 16px; position:relative; z-index:6;
-    border-left:4px solid var(--navy);
-  }
-  .upload-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
-  .upload-text h3{ margin:0; font-size:13.5px; font-weight:700; color:var(--gray-800); }
-  .upload-text p{ margin:3px 0 0; font-size:11.5px; color:var(--gray-400); font-weight:500; }
-  .upload-controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
-  .btn-update{
-    background:var(--orange); color:var(--white); border:none; padding:8px 18px; border-radius:8px;
-    font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap;
-    display:flex; align-items:center; gap:6px;
-  }
-  .btn-update:hover{ background:var(--orange-2); }
-  .btn-update:disabled{ opacity:.5; cursor:not-allowed; }
-  .upload-msg{ font-size:11.5px; margin-top:8px; font-weight:600; }
-  .upload-msg.ok{ color:var(--teal); }
-  .upload-msg.err{ color:var(--red); }
-
-  /* ---------- Filters ---------- */
-  .filters{
-    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
-    padding:16px 18px; margin:0 0 20px; position:relative; z-index:5;
-  }
-  .filters-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px 18px;
-    align-items:start;
-  }
-  .filter-block label{
-    display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
-    color:var(--gray-600); margin-bottom:6px;
-  }
-  .date-row{ display:flex; gap:8px; }
-  input[type=date], input[type=text].search{
-    width:100%; padding:8px 10px; border:1px solid var(--gray-200); border-radius:8px;
-    font-size:13px; color:var(--gray-800); background:var(--gray-50);
-    font-family:inherit;
-  }
-  input[type=date]:focus, input[type=text].search:focus{ outline:2px solid var(--orange-2); outline-offset:1px; background:var(--white); }
-  .chip-group{ display:flex; flex-wrap:wrap; gap:6px; }
-
-  /* ---------- Dropdown multi-select ---------- */
-  .dropdown-box{ position:relative; }
-  .dropdown-toggle{
-    width:100%; text-align:left; padding:8px 10px; border:1px solid var(--gray-200); border-radius:8px;
-    font-size:13px; color:var(--gray-800); background:var(--gray-50); cursor:pointer; font-family:inherit;
-    display:flex; justify-content:space-between; align-items:center; gap:8px;
-  }
-  .dropdown-toggle:hover{ border-color:var(--orange-2); }
-  .dropdown-toggle::after{ content:"▾"; color:var(--gray-400); font-size:11px; flex:none; }
-  .btn-clear{
-    background:var(--white); border:1px solid var(--gray-300); color:var(--gray-600);
-    padding:9px 16px; border-radius:9px; font-size:12.5px; font-weight:700; cursor:pointer;
-    white-space:nowrap;
-  }
-  .btn-clear:hover{ border-color:var(--red); color:var(--red); }
-  .active-count{ font-size:11px; color:var(--gray-400); margin-top:8px; }
-
-  /* ---------- Tabs ---------- */
-  .tabs{ display:flex; gap:4px; border-bottom:1px solid var(--gray-200); margin-bottom:20px; overflow-x:auto; }
-  .tab-btn{
-    background:none; border:none; padding:11px 18px; font-size:13.5px; font-weight:700;
-    color:var(--gray-600); cursor:pointer; position:relative; white-space:nowrap; font-family:inherit;
-  }
-  .tab-btn.active{ color:var(--navy); }
-  .tab-btn.active::after{
-    content:""; position:absolute; left:10px; right:10px; bottom:-1px; height:3px; border-radius:3px;
-    background:var(--orange);
-  }
-  .tab-panel{ display:none; animation:fadein .25s ease; }
-  .tab-panel.active{ display:block; }
-  @keyframes fadein{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
-
-  /* ---------- Table ---------- */
-  .table-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; flex-wrap:wrap; }
-  .table-toolbar .count{ font-size:12.5px; color:var(--gray-600); font-weight:600; }
-  .btn-export{ background:var(--navy); color:var(--white); border:none; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; }
-  .btn-export:hover{ background:var(--navy-3); }
-  .table-wrap{ overflow-x:auto; border-radius:var(--radius); box-shadow:var(--shadow); background:var(--white); }
-  table{ width:100%; border-collapse:collapse; font-size:12.5px; min-width:1000px; }
-  thead th{
-    background:var(--gray-50); text-align:left; padding:10px 12px; font-size:10.5px; text-transform:uppercase;
-    letter-spacing:.04em; color:var(--gray-600); cursor:pointer; white-space:nowrap; border-bottom:1px solid var(--gray-200);
-    position:sticky; top:0;
-  }
-  tbody td{ padding:9px 12px; border-bottom:1px solid var(--gray-100); color:var(--gray-800); white-space:nowrap; }
-  tbody tr:hover{ background:var(--gray-50); }
-
-  footer.foot{ text-align:center; padding:26px 0 10px; font-size:11.5px; color:var(--gray-400); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acompanhamento de Manutenção - Grupo Vamos</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- PapaParse para conversão automática de CSV -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
-<body>
+<body class="bg-gray-100 font-sans p-4 md:p-8">
 
-<header class="top">
-  <div class="top-inner">
-    <div class="brand-row">
-      <div class="brand-mark">V</div>
+  <div class="max-w-7xl mx-auto space-y-6">
+    
+    <!-- Cabeçalho -->
+    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-6 rounded-xl shadow-sm border border-gray-200 gap-4">
       <div>
-        <h1>Acompanhamento de Manutenção de Veículos</h1>
-        <p class="subtitle">Grupo Vamos · Painel interativo de gestão de paradas em oficina</p>
+        <h1 class="text-2xl font-bold text-gray-800">Painel de Manutenção de Veículos</h1>
+        <p class="text-sm text-gray-500">Grupo Vamos • Atualização em Tempo Real</p>
+      </div>
+      <button onclick="carregarDados()" class="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition flex items-center gap-2 shadow-sm">
+        🔄 Atualizar Dados
+      </button>
+    </header>
+
+    <!-- Cards de Indicadores / KPIs -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <p class="text-sm text-gray-500 font-medium">Total de Veículos</p>
+        <h3 id="kpiTotal" class="text-3xl font-bold text-gray-900 mt-2">0</h3>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <p class="text-sm text-gray-500 font-medium">Aguardando / Análise</p>
+        <h3 id="kpiAguardando" class="text-3xl font-bold text-amber-600 mt-2">0</h3>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+        <p class="text-sm text-gray-500 font-medium">Em Execução / Manutenção</p>
+        <h3 id="kpiExecucao" class="text-3xl font-bold text-emerald-600 mt-2">0</h3>
       </div>
     </div>
-    <div class="top-meta">
-      <div class="meta-chip"><b id="metaTotal">–</b><span>Registros</span></div>
-      <div class="meta-chip"><b id="metaStatus">Pronto</b><span>Status</span></div>
-    </div>
-  </div>
-</header>
 
-<div class="container">
-
-  <!-- PAINEL DE SINCRONIZAÇÃO DA PLANILHA ONLINE -->
-  <div class="upload-card">
-    <div class="upload-row">
-      <div class="upload-text">
-        <h3>Sincronização com Google Sheets</h3>
-        <p id="uploadStatus">Registros carregados: <span id="uploadCount">0</span></p>
+    <!-- Tabela de Veículos -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <!-- Barra de Pesquisa e Título -->
+      <div class="p-6 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 class="text-lg font-semibold text-gray-800">Lista de Manutenções</h2>
+        <input 
+          type="text" 
+          id="inputBusca" 
+          onkeyup="filtrarTabela()" 
+          placeholder="🔍 Buscar por placa ou cliente..." 
+          class="w-full sm:w-72 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
       </div>
-      <div class="upload-controls">
-        <button class="btn-update" id="btnUpdateData">
-          🔄 Sincronizar Agora
-        </button>
+
+      <!-- Tabela Scrollável -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-200">
+              <th class="p-4">Placa</th>
+              <th class="p-4">Cliente</th>
+              <th class="p-4">Chassi</th>
+              <th class="p-4">Status</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaCorpo" class="divide-y divide-gray-200 text-sm">
+            <tr>
+              <td colspan="4" class="p-6 text-center text-gray-500">
+                Carregando dados da sua planilha do Google...
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div class="upload-msg" id="uploadMsg"></div>
+
   </div>
 
-  <!-- TABELA DE EXIBIÇÃO DOS DADOS -->
-  <div class="table-toolbar">
-    <div class="count" id="tableCount">0 registros encontrados</div>
-    <button class="btn-export" id="btnExport">Exportar CSV</button>
-  </div>
-  <div class="table-wrap">
-    <table id="detailTable">
-      <thead id="tableHead"></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
+  <script>
+    // Link direto da sua planilha pública do Google
+    const URL_PLANILHA_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vStnBao7OMUZCWPFCIzAJW3j3992eRaQKv4VK0ORlff2GGpnSkZ-iKG8fw2DvSrCxbkspWTAlL3A44Q/pub?output=csv';
 
-  <footer class="foot">Painel sincronizado via Google Sheets · Grupo Vamos</footer>
-</div>
+    let dadosCompletos = [];
 
-<script>
-// URL da sua planilha publicada em CSV no Google Sheets
-const ONLINE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vStnBao7OMUZCWPFCIzAJW3j3992eRaQKv4VK0ORlff2GGpnSkZ-iKG8fw2DvSrCxbkspWTAlL3A44Q/pub?output=csv";
-
-let DATA = [];
-
-// Converte texto CSV para Array de Objetos JSON
-function parseCSV(csvText) {
-  const lines = csvText.split('\n').filter(line => line.trim() !== '');
-  if (lines.length === 0) return [];
-
-  // Extrai o cabeçalho
-  const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-  
-  const results = [];
-  for (let i = 1; i < lines.length; i++) {
-    // Trata colunas separadas por vírgula
-    const currentLine = lines[i].split(',').map(item => item.trim().replace(/^"|"$/g, ''));
-    if (currentLine.length === headers.length) {
-      let obj = {};
-      for (let j = 0; j < headers.length; j++) {
-        obj[headers[j]] = currentLine[j];
-      }
-      results.push(obj);
+    function carregarDados() {
+      Papa.parse(URL_PLANILHA_CSV, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+          dadosCompletos = results.data;
+          renderizarPainel(dadosCompletos);
+        },
+        error: function(err) {
+          console.error("Erro ao carregar a planilha:", err);
+          document.getElementById('tabelaCorpo').innerHTML = `
+            <tr>
+              <td colspan="4" class="p-6 text-center text-red-500">
+                Erro ao carregar dados. Verifique o link da planilha ou sua conexão.
+              </td>
+            </tr>`;
+        }
+      });
     }
-  }
-  return results;
-}
 
-// Consulta e baixa a planilha online
-async function carregarPlanilhaOnline() {
-  const msgEl = document.getElementById('uploadMsg');
-  const btnEl = document.getElementById('btnUpdateData');
-  
-  msgEl.className = "upload-msg";
-  msgEl.innerText = "Consultando e baixando dados do Google Sheets...";
-  btnEl.disabled = true;
+    // Busca o valor da chave independentemente de letras maiúsculas/minúsculas
+    function obterValorColuna(objeto, nomesPossiveis) {
+      const chaves = Object.keys(objeto);
+      for (const nome of nomesPossiveis) {
+        const chaveEncontrada = chaves.find(k => k.trim().toLowerCase() === nome.toLowerCase());
+        if (chaveEncontrada && objeto[chaveEncontrada]) {
+          return objeto[chaveEncontrada];
+        }
+      }
+      return '-';
+    }
 
-  try {
-    const response = await fetch(ONLINE_SHEET_URL);
-    if (!response.ok) throw new Error("Não foi possível conectar ao Google Sheets.");
-    
-    const csvText = await response.text();
-    DATA = parseCSV(csvText);
-    
-    msgEl.className = "upload-msg ok";
-    msgEl.innerText = "Sincronização realizada com sucesso!";
-    
-    document.getElementById('uploadCount').innerText = DATA.length;
-    document.getElementById('metaTotal').innerText = DATA.length;
-    
-    renderizarTabela();
-  } catch (error) {
-    console.error(error);
-    msgEl.className = "upload-msg err";
-    msgEl.innerText = "Erro ao carregar a planilha online. Verifique se o link está publicado corretamente.";
-  } finally {
-    btnEl.disabled = false;
-  }
-}
+    function renderizarPainel(dados) {
+      // 1. Calcular KPIs
+      document.getElementById('kpiTotal').innerText = dados.length;
 
-// Renderiza os dados baixados na tabela
-function renderizarTabela() {
-  const headEl = document.getElementById('tableHead');
-  const bodyEl = document.getElementById('tableBody');
-  const countEl = document.getElementById('tableCount');
+      const aguardandoCount = dados.filter(d => {
+        const status = (obterValorColuna(d, ['status', 'situacao', 'fase'])).toLowerCase();
+        return status.includes('aguardando') || status.includes('analise') || status.includes('aprova');
+      }).length;
 
-  headEl.innerHTML = '';
-  bodyEl.innerHTML = '';
+      const execucaoCount = dados.filter(d => {
+        const status = (obterValorColuna(d, ['status', 'situacao', 'fase'])).toLowerCase();
+        return status.includes('execucao') || status.includes('andamento') || status.includes('manutencao');
+      }).length;
 
-  if (DATA.length === 0) {
-    countEl.innerText = "Nenhum registro encontrado.";
-    return;
-  }
+      document.getElementById('kpiAguardando').innerText = aguardandoCount;
+      document.getElementById('kpiExecucao').innerText = execucaoCount;
 
-  const columns = Object.keys(DATA[0]);
+      // 2. Preencher a Tabela
+      const tbody = document.getElementById('tabelaCorpo');
+      tbody.innerHTML = '';
 
-  // Monta cabeçalho
-  let headHtml = '<tr>';
-  columns.forEach(col => {
-    headHtml += `<th>${col}</th>`;
-  });
-  headHtml += '</tr>';
-  headEl.innerHTML = headHtml;
+      if (dados.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="p-6 text-center text-gray-500">Nenhum registro encontrado.</td></tr>';
+        return;
+      }
 
-  // Monta corpo (exibindo até os 100 primeiros para performance)
-  let bodyHtml = '';
-  const maxRows = Math.min(DATA.length, 100);
-  for (let i = 0; i < maxRows; i++) {
-    bodyHtml += '<tr>';
-    columns.forEach(col => {
-      bodyHtml += `<td>${DATA[i][col] || ''}</td>`;
-    });
-    bodyHtml += '</tr>';
-  }
-  bodyEl.innerHTML = bodyHtml;
-  countEl.innerText = `Exibindo ${maxRows} de ${DATA.length} registros`;
-}
+      dados.forEach(item => {
+        const placa = obterValorColuna(item, ['placa', 'veiculo']);
+        const cliente = obterValorColuna(item, ['cliente', 'nome cliente', 'empresa']);
+        const chassi = obterValorColuna(item, ['chassi', 'chassis', 'num chassi']);
+        const status = obterValorColuna(item, ['status', 'situacao', 'fase', 'status manutencao']);
 
-// Botão de atualização manual
-document.getElementById('btnUpdateData').addEventListener('click', carregarPlanilhaOnline);
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-gray-50 transition';
+        tr.innerHTML = `
+          <td class="p-4 font-bold text-gray-900">${placa}</td>
+          <td class="p-4 text-gray-700">${cliente}</td>
+          <td class="p-4 text-gray-500 font-mono text-xs">${chassi}</td>
+          <td class="p-4">
+            <span class="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+              ${status}
+            </span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
 
-// Inicialização automática ao abrir a página
-window.addEventListener('DOMContentLoaded', () => {
-  carregarPlanilhaOnline();
-});
-</script>
+    function filtrarTabela() {
+      const termo = document.getElementById('inputBusca').value.toLowerCase();
+      const dadosFiltrados = dadosCompletos.filter(item => {
+        const placa = (obterValorColuna(item, ['placa', 'veiculo'])).toLowerCase();
+        const cliente = (obterValorColuna(item, ['cliente', 'nome cliente', 'empresa'])).toLowerCase();
+        return placa.includes(termo) || cliente.includes(termo);
+      });
+      renderizarPainel(dadosFiltrados);
+    }
+
+    // Inicia a busca ao carregar a página
+    window.onload = carregarDados;
+  </script>
 </body>
 </html>
