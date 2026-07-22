@@ -36,7 +36,7 @@
   }
   a{color:inherit;}
 
-  /* Header */
+  /* ---------- Header ---------- */
   header.top{
     background:linear-gradient(120deg,var(--navy) 0%,var(--navy-3) 65%,var(--navy-2) 100%);
     color:var(--white);
@@ -45,7 +45,8 @@
     overflow:hidden;
   }
   header.top::after{
-    content:""; position:absolute; left:0; right:0; bottom:0; height:5px;
+    content:"";
+    position:absolute; left:0; right:0; bottom:0; height:5px;
     background:linear-gradient(90deg,var(--orange),var(--amber) 60%,var(--orange-2));
   }
   .top-inner{
@@ -60,62 +61,141 @@
     font-weight:800; font-size:17px; color:var(--navy); flex:none;
     box-shadow:0 3px 10px rgba(242,102,29,.45);
   }
-  h1{ font-size:21px; margin:0; font-weight:700; letter-spacing:.2px; }
-  .subtitle{ margin:3px 0 0; font-size:12.5px; color:rgba(255,255,255,.68); font-weight:500; }
+  h1{
+    font-size:21px; margin:0; font-weight:700; letter-spacing:.2px;
+  }
+  .subtitle{
+    margin:3px 0 0; font-size:12.5px; color:rgba(255,255,255,.68); font-weight:500;
+  }
   .top-meta{ display:flex; gap:10px; flex-wrap:wrap; }
   .meta-chip{
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.14);
-    border-radius:10px; padding:8px 14px; text-align:left; min-width:108px;
+    border-radius:10px;
+    padding:8px 14px;
+    text-align:left;
+    min-width:108px;
   }
   .meta-chip b{ display:block; font-size:16px; font-weight:700; color:var(--white); }
   .meta-chip span{ font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,.6); }
 
-  /* Layout */
+  /* ---------- Layout ---------- */
   .container{ max-width:1440px; margin:0 auto; padding:20px 28px 60px; }
 
-  .status-card{
+  /* ---------- Upload / Update data ---------- */
+  .upload-card{
     background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
     padding:14px 18px; margin:-30px 0 16px; position:relative; z-index:6;
-    border-left:4px solid var(--navy); display:flex; justify-content:space-between; align-items:center;
+    border-left:4px solid var(--navy);
   }
-  .status-text h3{ margin:0; font-size:13.5px; font-weight:700; color:var(--gray-800); }
-  .status-text p{ margin:3px 0 0; font-size:11.5px; color:var(--gray-400); font-weight:500; }
-  .btn-reload{
+  .upload-row{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  .upload-text h3{ margin:0; font-size:13.5px; font-weight:700; color:var(--gray-800); }
+  .upload-text p{ margin:3px 0 0; font-size:11.5px; color:var(--gray-400); font-weight:500; }
+  .upload-controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .file-label{
+    background:var(--gray-50); border:1px solid var(--gray-200); color:var(--gray-800);
+    padding:8px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap;
+  }
+  .file-label:hover{ border-color:var(--orange-2); }
+  .file-name{ font-size:11.5px; color:var(--gray-400); max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .btn-update{
     background:var(--orange); color:var(--white); border:none; padding:8px 18px; border-radius:8px;
     font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap;
   }
-  .btn-reload:hover{ background:var(--orange-2); }
+  .btn-update:hover{ background:var(--orange-2); }
+  .btn-update:disabled{ opacity:.5; cursor:default; }
+  .upload-msg{ font-size:11.5px; margin-top:8px; font-weight:600; }
+  .upload-msg.ok{ color:var(--teal); }
+  .upload-msg.err{ color:var(--red); }
 
-  /* Filters */
+  /* ---------- Filters ---------- */
   .filters{
     background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
     padding:16px 18px; margin:0 0 20px; position:relative; z-index:5;
   }
   .filters-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px 18px; align-items:start;
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px 18px;
+    align-items:start;
   }
   .filter-block label{
     display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
     color:var(--gray-600); margin-bottom:6px;
   }
   .date-row{ display:flex; gap:8px; }
-  input[type=date], input[type=text].search, select.dropdown-select{
+  input[type=date], input[type=text].search{
     width:100%; padding:8px 10px; border:1px solid var(--gray-200); border-radius:8px;
-    font-size:13px; color:var(--gray-800); background:var(--gray-50); font-family:inherit;
+    font-size:13px; color:var(--gray-800); background:var(--gray-50);
+    font-family:inherit;
   }
-  input[type=date]:focus, input[type=text].search:focus, select.dropdown-select:focus{
-    outline:2px solid var(--orange-2); outline-offset:1px; background:var(--white);
+  input[type=date]:focus, input[type=text].search:focus{ outline:2px solid var(--orange-2); outline-offset:1px; background:var(--white); }
+  .chip-group{ display:flex; flex-wrap:wrap; gap:6px; }
+  .chip-toggle{
+    border:1px solid var(--gray-200); background:var(--gray-50); color:var(--gray-600);
+    padding:6px 11px; border-radius:20px; font-size:12px; cursor:pointer; font-weight:600;
+    transition:all .12s ease; user-select:none;
   }
+  .chip-toggle:hover{ border-color:var(--orange-2); }
+  .chip-toggle.active{ background:var(--navy); color:var(--white); border-color:var(--navy); }
+  .placa-box{ position:relative; }
+  .placa-selected{ display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
+  .placa-tag{
+    background:var(--orange); color:var(--white); font-size:11.5px; font-weight:700;
+    padding:4px 8px 4px 10px; border-radius:14px; display:flex; align-items:center; gap:6px;
+  }
+  .placa-tag button{
+    background:rgba(255,255,255,.3); border:none; color:var(--white); width:15px;height:15px; border-radius:50%;
+    cursor:pointer; font-size:10px; line-height:1; display:flex; align-items:center; justify-content:center; padding:0;
+  }
+  .placa-suggest{
+    position:absolute; top:100%; left:0; right:0; background:var(--white); border:1px solid var(--gray-200);
+    border-radius:10px; box-shadow:var(--shadow); max-height:220px; overflow-y:auto; z-index:20; margin-top:4px; display:none;
+  }
+  .placa-suggest.show{ display:block; }
+  .placa-suggest div{ padding:8px 12px; font-size:13px; cursor:pointer; }
+  .placa-suggest div:hover{ background:var(--gray-100); }
+
+  /* ---------- Dropdown multi-select (ex.: Fornecedor) ---------- */
+  .dropdown-box{ position:relative; }
+  .dropdown-toggle{
+    width:100%; text-align:left; padding:8px 10px; border:1px solid var(--gray-200); border-radius:8px;
+    font-size:13px; color:var(--gray-800); background:var(--gray-50); cursor:pointer; font-family:inherit;
+    display:flex; justify-content:space-between; align-items:center; gap:8px;
+  }
+  .dropdown-toggle:hover{ border-color:var(--orange-2); }
+  .dropdown-toggle::after{ content:"▾"; color:var(--gray-400); font-size:11px; flex:none; }
+  .dropdown-panel{
+    display:none; position:absolute; top:100%; left:0; right:0; margin-top:4px; z-index:20;
+    background:var(--white); border:1px solid var(--gray-200); border-radius:10px; box-shadow:var(--shadow);
+    padding:10px; min-width:260px;
+  }
+  .dropdown-panel.show{ display:block; }
+  .dropdown-search{ margin-bottom:8px; }
+  .dropdown-actions{ display:flex; gap:8px; margin-bottom:8px; }
+  .dropdown-action{
+    background:var(--gray-50); border:1px solid var(--gray-200); color:var(--gray-600);
+    padding:5px 10px; border-radius:7px; font-size:11px; font-weight:700; cursor:pointer;
+  }
+  .dropdown-action:hover{ border-color:var(--orange-2); color:var(--orange); }
+  .dropdown-list{ max-height:230px; overflow-y:auto; display:flex; flex-direction:column; gap:2px; }
+  .dropdown-item{
+    display:flex; align-items:center; gap:8px; padding:6px 6px; border-radius:6px; cursor:pointer; font-size:12.5px; color:var(--gray-800);
+  }
+  .dropdown-item:hover{ background:var(--gray-50); }
+  .dropdown-item input{ flex:none; accent-color:var(--orange); width:14px; height:14px; cursor:pointer; }
+  .dropdown-item span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .dropdown-empty{ font-size:12px; color:var(--gray-400); padding:10px 4px; text-align:center; }
   .filter-actions{ display:flex; align-items:flex-end; }
   .btn-clear{
     background:var(--white); border:1px solid var(--gray-300); color:var(--gray-600);
-    padding:9px 16px; border-radius:9px; font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap;
+    padding:9px 16px; border-radius:9px; font-size:12.5px; font-weight:700; cursor:pointer;
+    white-space:nowrap;
   }
   .btn-clear:hover{ border-color:var(--red); color:var(--red); }
-  .active-count{ font-size:11px; color:var(--gray-400); margin-top:8px; }
+  .active-count{
+    font-size:11px; color:var(--gray-400); margin-top:8px;
+  }
 
-  /* Tabs */
+  /* ---------- Tabs / submenus ---------- */
   .tabs{ display:flex; gap:4px; border-bottom:1px solid var(--gray-200); margin-bottom:20px; overflow-x:auto; }
   .tab-btn{
     background:none; border:none; padding:11px 18px; font-size:13.5px; font-weight:700;
@@ -130,7 +210,7 @@
   .tab-panel.active{ display:block; }
   @keyframes fadein{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
 
-  /* KPIs */
+  /* ---------- KPIs ---------- */
   .kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:20px; }
   .kpi-card{
     background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 18px;
@@ -142,8 +222,26 @@
   .kpi-card.c-amber{ border-left-color:var(--amber); }
   .kpi-card.c-red{ border-left-color:var(--red); }
   .kpi-card.c-navy{ border-left-color:var(--navy); }
+  .kpi-card.c-purple{ border-left-color:var(--purple); }
 
-  /* Table */
+  /* ---------- Chart cards ---------- */
+  .grid2{ display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px; }
+  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
+  .grid2b{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  @media(max-width:980px){ .grid2,.grid3,.grid2b{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 18px 14px;
+  }
+  .card h3{ margin:0 0 2px; font-size:14.5px; color:var(--gray-800); font-weight:700; }
+  .card .card-sub{ margin:0 0 12px; font-size:11.5px; color:var(--gray-400); font-weight:500; }
+  .card canvas{ width:100%; display:block; }
+  .legend{ display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:10px; }
+  .legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--gray-600); font-weight:600; }
+  .legend-dot{ width:9px;height:9px;border-radius:50%; flex:none; }
+  .empty-note{ font-size:12.5px; color:var(--gray-400); padding:30px 0; text-align:center; }
+
+  /* ---------- Table ---------- */
   .table-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; flex-wrap:wrap; }
   .table-toolbar .count{ font-size:12.5px; color:var(--gray-600); font-weight:600; }
   .btn-export{
@@ -155,15 +253,34 @@
   table{ width:100%; border-collapse:collapse; font-size:12.5px; min-width:1000px; }
   thead th{
     background:var(--gray-50); text-align:left; padding:10px 12px; font-size:10.5px; text-transform:uppercase;
-    letter-spacing:.04em; color:var(--gray-600); white-space:nowrap; border-bottom:1px solid var(--gray-200);
+    letter-spacing:.04em; color:var(--gray-600); cursor:pointer; white-space:nowrap; border-bottom:1px solid var(--gray-200);
     position:sticky; top:0;
   }
+  thead th:hover{ color:var(--orange); }
   tbody td{ padding:9px 12px; border-bottom:1px solid var(--gray-100); color:var(--gray-800); white-space:nowrap; }
   tbody tr:hover{ background:var(--gray-50); }
+  .badge{ padding:3px 9px; border-radius:12px; font-size:10.5px; font-weight:700; display:inline-block; }
+  .badge.ok{ background:#E4F5F1; color:var(--teal); }
+  .badge.late{ background:#FDEBEC; color:var(--red); }
+  .badge.today{ background:#FFF4E0; color:#B87400; }
+  .badge.na{ background:var(--gray-100); color:var(--gray-400); }
+  .pager{ display:flex; justify-content:center; gap:6px; padding:14px; }
+  .pager button{
+    border:1px solid var(--gray-200); background:var(--white); padding:6px 12px; border-radius:7px;
+    font-size:12px; cursor:pointer; font-weight:600; color:var(--gray-600);
+  }
+  .pager button.active{ background:var(--navy); color:var(--white); border-color:var(--navy); }
+  .pager button:disabled{ opacity:.4; cursor:default; }
 
   footer.foot{ text-align:center; padding:26px 0 10px; font-size:11.5px; color:var(--gray-400); }
+
+  @media(max-width:640px){
+    header.top{ padding:18px 16px 18px; }
+    .container{ padding:16px 16px 50px; }
+    h1{ font-size:18px; }
+  }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 
@@ -173,214 +290,299 @@
       <div class="brand-mark">V</div>
       <div>
         <h1>Acompanhamento de Manutenção de Veículos</h1>
-        <p class="subtitle">Grupo Vamos · Painel em Tempo Real integrado via Google Sheets CSV</p>
+        <p class="subtitle">Grupo Vamos · Painel interativo de gestão de paradas em oficina</p>
       </div>
     </div>
     <div class="top-meta">
-      <div class="meta-chip"><b id="metaTotal">0</b><span>Registros</span></div>
-      <div class="meta-chip"><b id="metaClientes">0</b><span>Clientes</span></div>
+      <div class="meta-chip"><b id="metaTotal">–</b><span>Registros</span></div>
+      <div class="meta-chip"><b id="metaPeriodo">–</b><span>Período da base</span></div>
+      <div class="meta-chip"><b id="metaClientes">–</b><span>Clientes</span></div>
     </div>
   </div>
 </header>
 
 <div class="container">
-  <div class="status-card">
-    <div class="status-text">
-      <h3>Status da Sincronização</h3>
-      <p id="syncStatus">Carregando dados diretamente da planilha online...</p>
+
+  <!-- UPLOAD / UPDATE DATA -->
+  <div class="upload-card">
+    <div class="upload-row">
+      <div class="upload-text">
+        <h3>Atualizar base de dados</h3>
+        <p id="uploadStatus">Base atual carregada: <span id="uploadCount">–</span> registros</p>
+      </div>
+      <div class="upload-controls">
+        <label class="file-label" for="fileInput">Escolher arquivo Excel (.xlsx)</label>
+        <input type="file" id="fileInput" accept=".xlsx,.xls" hidden>
+        <span class="file-name" id="fileNameLabel">Nenhum arquivo selecionado</span>
+        <button class="btn-update" id="btnUpdateData">Atualizar</button>
+      </div>
     </div>
-    <button class="btn-reload" onclick="loadCSVData()">Atualizar Dados</button>
+    <div class="upload-msg" id="uploadMsg"></div>
   </div>
 
+  <!-- FILTERS -->
   <div class="filters">
     <div class="filters-grid">
       <div class="filter-block">
+        <label>Intervalo — Parada na Oficina</label>
+        <div class="date-row">
+          <input type="date" id="fDateFrom">
+          <input type="date" id="fDateTo">
+        </div>
+      </div>
+      <div class="filter-block placa-box">
         <label>Placa do Veículo</label>
-        <input type="text" class="search" id="fPlaca" placeholder="Filtrar por placa..." oninput="applyFilters()">
+        <input type="text" class="search" id="fPlacaSearch" placeholder="Buscar placa…" autocomplete="off">
+        <div class="placa-suggest" id="placaSuggest"></div>
+        <div class="placa-selected" id="placaSelected"></div>
+      </div>
+      <div class="filter-block dropdown-box">
+        <label>Fornecedor (Oficina)</label>
+        <button type="button" class="dropdown-toggle" id="fFornecedorToggle">Todos selecionados</button>
+        <div class="dropdown-panel" id="fFornecedorPanel">
+          <input type="text" class="search dropdown-search" id="fFornecedorFilterSearch" placeholder="Filtrar lista…" autocomplete="off">
+          <div class="dropdown-actions">
+            <button type="button" class="dropdown-action" id="fFornecedorAll">Selecionar todos</button>
+            <button type="button" class="dropdown-action" id="fFornecedorNone">Limpar seleção</button>
+          </div>
+          <div class="dropdown-list" id="fFornecedorList"></div>
+        </div>
       </div>
       <div class="filter-block">
         <label>Tipo de Manutenção</label>
-        <select class="dropdown-select" id="fTipo" onchange="applyFilters()">
-          <option value="">Todos</option>
-        </select>
+        <div class="chip-group" id="fTipoManut"></div>
       </div>
       <div class="filter-block">
         <label>Cliente</label>
-        <select class="dropdown-select" id="fCliente" onchange="applyFilters()">
-          <option value="">Todos</option>
-        </select>
+        <div class="chip-group" id="fCliente"></div>
+      </div>
+      <div class="filter-block">
+        <label>Status Parada (GEO)</label>
+        <div class="chip-group" id="fStatusGeo"></div>
+      </div>
+      <div class="filter-block">
+        <label>Controlador Frota Vamos</label>
+        <div class="chip-group" id="fControlador"></div>
       </div>
       <div class="filter-block filter-actions">
-        <button class="btn-clear" onclick="clearFilters()">Limpar filtros</button>
+        <button class="btn-clear" id="btnClear">Limpar filtros</button>
       </div>
     </div>
+    <div class="active-count" id="activeCount"></div>
   </div>
 
+  <!-- TABS -->
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('visao', this)">Visão Geral</button>
-    <button class="tab-btn" onclick="switchTab('detalhe', this)">Detalhamento</button>
+    <button class="tab-btn active" data-tab="visao">Visão Geral</button>
+    <button class="tab-btn" data-tab="pareto">Pareto &amp; Tempos</button>
+    <button class="tab-btn" data-tab="frota">Frota, Cliente &amp; Fornecedores</button>
+    <button class="tab-btn" data-tab="parados">🚧 Veículos Parados em Oficina</button>
+    <button class="tab-btn" data-tab="detalhe">Detalhamento</button>
   </div>
 
+  <!-- TAB: VISÃO GERAL -->
   <div class="tab-panel active" id="tab-visao">
-    <div class="kpi-grid">
-      <div class="kpi-card c-navy">
-        <div class="val" id="kpiTotal">0</div>
-        <div class="lbl">Total de Paradas</div>
+    <div class="kpi-grid" id="kpiGrid"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Evolução mensal de paradas</h3>
+        <p class="card-sub">Volume de OS por mês (barras) e tempo médio de parada em dias (linha)</p>
+        <canvas id="chartMonthly"></canvas>
+        <div class="legend" id="legendMonthly"></div>
       </div>
-      <div class="kpi-card c-teal">
-        <div class="val" id="kpiLiberados">0</div>
-        <div class="lbl">Veículos Liberados</div>
+      <div class="card">
+        <h3>Distribuição por Tipo de Manutenção</h3>
+        <p class="card-sub">Participação percentual no total de paradas</p>
+        <canvas id="chartTipoDonut"></canvas>
+        <div class="legend" id="legendTipoDonut"></div>
       </div>
-      <div class="kpi-card c-amber">
-        <div class="val" id="kpiEmAndamento">0</div>
-        <div class="lbl">Em Manutenção / Parados</div>
+    </div>
+    <div class="grid2b">
+      <div class="card">
+        <h3>Status de Prazo (Glosa)</h3>
+        <p class="card-sub">Comparativo entre OS entregues no prazo e em atraso</p>
+        <canvas id="chartPrazoDonut"></canvas>
+        <div class="legend" id="legendPrazoDonut"></div>
+      </div>
+      <div class="card">
+        <h3>Situação da Parada (GEO)</h3>
+        <p class="card-sub">Etapa atual das ordens de serviço em aberto na base</p>
+        <canvas id="chartStatusGeo"></canvas>
+        <div class="legend" id="legendStatusGeo"></div>
       </div>
     </div>
   </div>
 
+  <!-- TAB: PARETO & TEMPOS -->
+  <div class="tab-panel" id="tab-pareto">
+    <div class="grid2">
+      <div class="card">
+        <h3>Pareto — Tipo de Manutenção</h3>
+        <p class="card-sub">Frequência de paradas x percentual acumulado (regra 80/20)</p>
+        <canvas id="chartParetoTipo"></canvas>
+      </div>
+      <div class="card">
+        <h3>Pareto — Grupo de Manutenção</h3>
+        <p class="card-sub">Componentes / sistemas mais recorrentes nas manutenções</p>
+        <canvas id="chartParetoGrupo"></canvas>
+      </div>
+    </div>
+    <div class="grid2b">
+      <div class="card">
+        <h3>Tempo médio de parada por Tipo de Manutenção</h3>
+        <p class="card-sub">Dias corridos entre parada na oficina e entrega ao cliente</p>
+        <canvas id="chartTempoTipo"></canvas>
+      </div>
+      <div class="card">
+        <h3>Tempo médio de parada por Grupo de Manutenção</h3>
+        <p class="card-sub">Dias corridos entre parada na oficina e entrega ao cliente</p>
+        <canvas id="chartTempoGrupo"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: FROTA / CLIENTE / FORNECEDORES -->
+  <div class="tab-panel" id="tab-frota">
+    <div class="grid2b">
+      <div class="card">
+        <h3>Paradas por Cliente</h3>
+        <p class="card-sub">Volume total de OS por cliente atendido</p>
+        <canvas id="chartCliente"></canvas>
+      </div>
+      <div class="card">
+        <h3>Top 10 veículos com mais paradas</h3>
+        <p class="card-sub">Placas com maior recorrência de manutenção no período</p>
+        <canvas id="chartTopPlacas"></canvas>
+      </div>
+    </div>
+    <div class="grid2b">
+      <div class="card">
+        <h3>Top 10 fornecedores / oficinas</h3>
+        <p class="card-sub">Oficinas com maior volume de ordens de serviço</p>
+        <canvas id="chartFornecedor"></canvas>
+      </div>
+      <div class="card">
+        <h3>Top 10 bases / cidades</h3>
+        <p class="card-sub">Distribuição geográfica das paradas</p>
+        <canvas id="chartBase"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: VEÍCULOS PARADOS EM OFICINA -->
+  <div class="tab-panel" id="tab-parados">
+    <div class="kpi-grid" id="kpiParados" style="margin-bottom:20px"></div>
+    <div class="grid2" style="margin-bottom:16px">
+      <div class="card">
+        <h3>Motivo da Parada — Top 15</h3>
+        <p class="card-sub">Veículos atualmente em oficina (sem data de entrega)</p>
+        <canvas id="chartParadoMotivo"></canvas>
+      </div>
+      <div class="card">
+        <h3>Tipo de Manutenção — Em Aberto</h3>
+        <p class="card-sub">Distribuição dos veículos parados por categoria de serviço</p>
+        <canvas id="chartParadoTipo"></canvas>
+        <div class="legend" id="legendParadoTipo"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: DETALHE -->
   <div class="tab-panel" id="tab-detalhe">
     <div class="table-toolbar">
-      <div class="count" id="tableCount">Exibindo 0 registros</div>
+      <div class="count" id="tableCount">–</div>
+      <button class="btn-export" id="btnExport">Exportar CSV (filtro atual)</button>
     </div>
     <div class="table-wrap">
-      <table>
+      <table id="detailTable">
         <thead>
           <tr>
-            <th>Placa</th>
-            <th>Cliente</th>
-            <th>Tipo Manutenção</th>
-            <th>Motivo Parada</th>
-            <th>Data Abertura</th>
-            <th>Status Parada</th>
+            <th data-key="placa">Placa</th>
+            <th data-key="cliente">Cliente</th>
+            <th data-key="tipoManut">Tipo Manutenção</th>
+            <th data-key="grupoManut">Grupo</th>
+            <th data-key="dtParadaOficina">Parada Oficina</th>
+            <th data-key="dtEntregaCliente">Entrega Cliente</th>
+            <th data-key="duracaoDias">Duração (dias)</th>
+            <th data-key="glosa">Prazo</th>
+            <th data-key="statusParadaGeo">Status GEO</th>
+            <th data-key="fornecedor">Fornecedor</th>
+            <th data-key="base">Base</th>
+            <th data-key="controlador">Controlador</th>
           </tr>
         </thead>
         <tbody id="detailBody"></tbody>
       </table>
     </div>
+    <div class="pager" id="pager"></div>
   </div>
 
-  <footer class="foot">Painel gerado dinamicamente via CSV · Grupo Vamos</footer>
+  <footer class="foot">Painel gerado a partir da base de manutenção do Grupo Vamos · Dados atualizados</footer>
 </div>
 
 <script>
-const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vStnBao7OMUZCWPFCIzAJW3j3992eRaQKv4VK0ORlff2GGpnSkZ-iKG8fw2DvSrCxbkspWTAlL3A44Q/pub?output=csv";
+// Base de dados tratada e estruturada para funcionamento local
+const DATA = [
+  {"placa": "TXI3E83", "cliente": "ECO EXPRESS", "base": "CAMPO GRANDE -MS", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "PREVENTIVA", "grupoManut": "MOTOR", "modelo": "Boxer Cargo 13m³ 2.2 Mec Diesel", "fornecedor": "DISCAUTOL - MS", "motivoParada": "1° REVISÃO 20MIL KM", "descServicos": "02/03/2026 - Agendamento primeira revisão 20mil", "dtAbertura": "2026-03-02T16:30:00", "dtParadaOficina": "2026-03-04T12:40:00", "dtEntregaCliente": "2026-03-09T08:00:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "EM ATRASO", "duracaoDias": 4.81},
+  {"placa": "TEC1G14", "cliente": "RODOPRIME/BRJ", "base": "N/A", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "CORRETIVA", "grupoManut": "ELÉTRICA", "modelo": "Iveco Daily 35-160 CS", "fornecedor": "DEVA Pouso Alegre - MG", "motivoParada": "Bateria", "descServicos": "30/06 - Abertura do chamado e envio do técnico.", "dtAbertura": "2025-06-30T09:00:00", "dtParadaOficina": "2025-06-30T00:00:00", "dtEntregaCliente": "2025-06-30T20:02:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "NO PRAZO", "duracaoDias": 0.83},
+  {"placa": "TEO9D65", "cliente": "RODOPRIME/BRJ", "base": "N/A", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "CORRETIVA", "grupoManut": "ELÉTRICA", "modelo": "Iveco Daily 35-160 CS", "fornecedor": "DEVA Pouso Alegre - MG", "motivoParada": "Bateria", "descServicos": "30/06 - Abertura do chamado.", "dtAbertura": "2025-06-30T09:00:00", "dtParadaOficina": "2025-06-30T00:00:00", "dtEntregaCliente": "2025-06-30T20:02:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "NO PRAZO", "duracaoDias": 0.83},
+  {"placa": "TEH9J66", "cliente": "RODOPRIME/BRJ", "base": "N/A", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "CORRETIVA", "grupoManut": "ELÉTRICA", "modelo": "Iveco Daily 35-160 CS", "fornecedor": "DEVA Pouso Alegre - MG", "motivoParada": "Bateria", "descServicos": "30/06 - Abertura do chamado.", "dtAbertura": "2025-06-30T09:00:00", "dtParadaOficina": "2025-06-30T00:00:00", "dtEntregaCliente": "2025-06-30T20:02:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "NO PRAZO", "duracaoDias": 0.83},
+  {"placa": "TEH9J77", "cliente": "RODOPRIME/BRJ", "base": "N/A", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "CORRETIVA", "grupoManut": "RODANTE", "modelo": "Iveco Daily 35-160 CS", "fornecedor": "DEVA Pouso Alegre - MG", "motivoParada": "Roda", "descServicos": "Reparo na roda realizado.", "dtAbertura": "2025-07-14T00:00:00", "dtParadaOficina": "2025-07-15T00:00:00", "dtEntregaCliente": "2025-07-16T00:00:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "NO PRAZO", "duracaoDias": 1.0},
+  {"placa": "TDZ7B84", "cliente": "RODOPRIME/BRJ", "base": "N/A", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "CORRETIVA", "grupoManut": "LUBRIFICAÇÃO", "modelo": "Ducato Maxicargo 13m³", "fornecedor": "OTTIMA FIAT - DIVINÓPOLIS", "motivoParada": "TROCA DE OLEO", "descServicos": "Troca de óleo efetuada.", "dtAbertura": "2025-09-19T00:00:00", "dtParadaOficina": "2025-09-19T00:00:00", "dtEntregaCliente": "2025-09-19T00:00:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "NO PRAZO", "duracaoDias": 0.0},
+  {"placa": "TXI3F29", "cliente": "LOG", "base": "GUARARAPES", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "CORRETIVA", "grupoManut": "CARROCERIA", "modelo": "Jumper Cargo 13m³", "fornecedor": "CITROEN - PIGALLE PIEDADE", "motivoParada": "Portas travadas", "descServicos": "Ajuste na trava da porta.", "dtAbertura": "2025-10-29T09:30:00", "dtParadaOficina": "2025-10-29T09:30:00", "dtEntregaCliente": "2025-10-29T09:30:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "NO PRAZO", "duracaoDias": 0.0},
+  {"placa": "TXI3F43", "cliente": "LOG", "base": "CARUARU-PE", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "ASSISTÊNCIA 24H", "grupoManut": "SOCORRO", "modelo": "Boxer Cargo 13m³", "fornecedor": "Citroën Pigalle Piedade", "motivoParada": "REBOQUE", "descServicos": "Reboque acionado.", "dtAbertura": "2025-12-01T12:00:00", "dtParadaOficina": "2025-12-01T15:30:00", "dtEntregaCliente": "2025-12-01T15:30:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "NO PRAZO", "duracaoDias": 0.0},
+  {"placa": "TXE9J38", "cliente": "A L C TRANSPORTES", "base": "GOIANIA-GO", "controlador": "GUILHERME", "tipoFrota": "EFETIVO", "tipoManut": "CORRETIVA", "grupoManut": "AR CONDICIONADO", "modelo": "Ducato Maxicargo 13m³", "fornecedor": "TECAR FIAT", "motivoParada": "Ar Condicionado", "descServicos": "Manutenção do ar condicionado.", "dtAbertura": "2025-11-27T16:40:00", "dtParadaOficina": "2025-12-09T13:02:00", "dtEntregaCliente": "2026-01-15T16:45:00", "statusParadaGeo": "LIBERADO", "statusParadoRodando": "RODANDO", "glosa": "EM ATRASO", "duracaoDias": 37.15}
+];
 
-let rawData = [];
-let filteredData = [];
+// Inicialização da interface e preenchimento da tabela
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("metaTotal").innerText = DATA.length;
+  document.getElementById("uploadCount").innerText = DATA.length;
 
-function loadCSVData() {
-  document.getElementById('syncStatus').innerText = 'Carregando dados...';
-  
-  Papa.parse(CSV_URL, {
-    download: true,
-    header: true,
-    skipEmptyLines: true,
-    complete: function(results) {
-      rawData = results.data;
-      filteredData = [...rawData];
-      document.getElementById('syncStatus').innerText = `Sucesso! ${rawData.length} registros sincronizados.`;
-      
-      initFilters();
-      renderDashboard();
-    },
-    error: function(err) {
-      document.getElementById('syncStatus').innerText = 'Erro ao carregar dados do CSV.';
-      console.error(err);
-    }
+  const clientes = [...new Set(DATA.map(d => d.cliente))].filter(Boolean);
+  document.getElementById("metaClientes").innerText = clientes.length;
+  document.getElementById("metaPeriodo").innerText = "2025/2026";
+
+  renderTable(DATA);
+  setupTabs();
+});
+
+function renderTable(data) {
+  const tbody = document.getElementById("detailBody");
+  document.getElementById("tableCount").innerText = `${data.length} registro(s) exibido(s)`;
+  tbody.innerHTML = data.map(item => `
+    <tr>
+      <td><b>${item.placa || '-'}</b></td>
+      <td>${item.cliente || '-'}</td>
+      <td>${item.tipoManut || '-'}</td>
+      <td>${item.grupoManut || '-'}</td>
+      <td>${item.dtParadaOficina ? item.dtParadaOficina.replace('T', ' ') : '-'}</td>
+      <td>${item.dtEntregaCliente ? item.dtEntregaCliente.replace('T', ' ') : '-'}</td>
+      <td>${item.duracaoDias !== null ? item.duracaoDias : '-'}</td>
+      <td><span class="badge ${item.glosa === 'NO PRAZO' ? 'ok' : 'late'}">${item.glosa || '-'}</span></td>
+      <td>${item.statusParadaGeo || '-'}</td>
+      <td>${item.fornecedor || '-'}</td>
+      <td>${item.base || '-'}</td>
+      <td>${item.controlador || '-'}</td>
+    </tr>
+  `).join('');
+}
+
+function setupTabs() {
+  const buttons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const tabId = `tab-${btn.dataset.tab}`;
+      document.getElementById(tabId).classList.add('active');
+    });
   });
 }
-
-function initFilters() {
-  const tipos = [...new Set(rawData.map(item => item['Tipo Manutenção'] || item['tipoManut']).filter(Boolean))];
-  const clientes = [...new Set(rawData.map(item => item['Cliente'] || item['cliente']).filter(Boolean))];
-
-  populateSelect('fTipo', tipos);
-  populateSelect('fCliente', clientes);
-}
-
-function populateSelect(elementId, options) {
-  const select = document.getElementById(elementId);
-  select.innerHTML = '<option value="">Todos</option>';
-  options.forEach(opt => {
-    const el = document.createElement('option');
-    el.value = opt;
-    el.innerText = opt;
-    select.appendChild(el);
-  });
-}
-
-function applyFilters() {
-  const placa = document.getElementById('fPlaca').value.toLowerCase();
-  const tipo = document.getElementById('fTipo').value;
-  const cliente = document.getElementById('fCliente').value;
-
-  filteredData = rawData.filter(item => {
-    const itemPlaca = (item['Placa'] || item['placa'] || '').toLowerCase();
-    const itemTipo = item['Tipo Manutenção'] || item['tipoManut'] || '';
-    const itemCliente = item['Cliente'] || item['cliente'] || '';
-
-    const matchPlaca = !placa || itemPlaca.includes(placa);
-    const matchTipo = !tipo || itemTipo === tipo;
-    const matchCliente = !cliente || itemCliente === cliente;
-
-    return matchPlaca && matchTipo && matchCliente;
-  });
-
-  renderDashboard();
-}
-
-function clearFilters() {
-  document.getElementById('fPlaca').value = '';
-  document.getElementById('fTipo').value = '';
-  document.getElementById('fCliente').value = '';
-  applyFilters();
-}
-
-function renderDashboard() {
-  document.getElementById('metaTotal').innerText = filteredData.length;
-  
-  const clientesUnicos = new Set(filteredData.map(i => i['Cliente'] || i['cliente'])).size;
-  document.getElementById('metaClientes').innerText = clientesUnicos;
-
-  document.getElementById('kpiTotal').innerText = filteredData.length;
-
-  const liberados = filteredData.filter(i => {
-    const st = (i['Status Parada GEO'] || i['statusParadaGeo'] || '').toUpperCase();
-    return st.includes('LIBERADO');
-  }).length;
-  
-  document.getElementById('kpiLiberados').innerText = liberados;
-  document.getElementById('kpiEmAndamento').innerText = filteredData.length - liberados;
-
-  // Render Table
-  const tbody = document.getElementById('detailBody');
-  tbody.innerHTML = '';
-  document.getElementById('tableCount').innerText = `Exibindo ${filteredData.length} registros`;
-
-  filteredData.forEach(row => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${row['Placa'] || row['placa'] || '-'}</td>
-      <td>${row['Cliente'] || row['cliente'] || '-'}</td>
-      <td>${row['Tipo Manutenção'] || row['tipoManut'] || '-'}</td>
-      <td>${row['Motivo Parada'] || row['motivoParada'] || '-'}</td>
-      <td>${row['Data Abertura'] || row['dtAbertura'] || '-'}</td>
-      <td>${row['Status Parada GEO'] || row['statusParadaGeo'] || '-'}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function switchTab(tabId, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  
-  document.getElementById('tab-' + tabId).classList.add('active');
-  btn.classList.add('active');
-}
-
-// Inicializar na carga da página
-window.onload = loadCSVData;
 </script>
 </body>
 </html>
