@@ -368,6 +368,10 @@
         <div class="chip-group" id="fStatusGeo"></div>
       </div>
       <div class="filter-block">
+        <label>Status Parado/Rodando</label>
+        <div class="chip-group" id="fStatusRodando"></div>
+      </div>
+      <div class="filter-block">
         <label>Controlador Frota Vamos</label>
         <div class="chip-group" id="fControlador"></div>
       </div>
@@ -607,8 +611,14 @@ const COLOR_TIPO = {
 const PALETTE = ['#F2661D','#0A1F44','#249688','#FFB238','#6B4E9E','#E5484D','#3D6FB4','#9AA3B2','#B87400','#7A8CFF','#C8506B','#5B6472'];
 function colorFor(label, idx){ return PALETTE[idx % PALETTE.length]; }
 
-let allTipos = [], allClientes = [], allPlacas = [], allStatusGeo = [], allControladores = [], allFornecedores = [];
+let allTipos = [], allClientes = [], allPlacas = [], allStatusGeo = [], allControladores = [], allFornecedores = [], allStatusRodando = [];
 let minDate = null, maxDate = null;
+
+function normStatusRodando(v){
+  if(!v) return null;
+  const s = String(v).trim().toUpperCase();
+  return s || null;
+}
 
 function computeOptions(){
   allTipos = Array.from(new Set(DATA.map(d=>d.tipoManut).filter(Boolean))).sort();
@@ -617,6 +627,7 @@ function computeOptions(){
   allStatusGeo = Array.from(new Set(DATA.map(d=>d.statusParadaGeo).filter(Boolean))).sort();
   allControladores = Array.from(new Set(DATA.map(d=>d.controlador).filter(Boolean))).sort();
   allFornecedores = Array.from(new Set(DATA.map(d=>d.fornecedor).filter(Boolean))).sort();
+  allStatusRodando = Array.from(new Set(DATA.map(d=>normStatusRodando(d.statusParadoRodando)).filter(Boolean))).sort();
 }
 function computeDateBounds(){
   const paradaDates = DATA.map(d=>d.dtParadaOficina).filter(Boolean).sort();
@@ -632,6 +643,7 @@ let state = {
   controladores:new Set(),
   placas:new Set(),
   fornecedores:new Set(),
+  statusRodando:new Set(),
   sortKey:'dtParadaOficina', sortDir:'desc',
   page:1, pageSize:25
 };
@@ -756,6 +768,7 @@ function rebuildAllChipGroups(){
   buildChipGroup('fTipoManut', allTipos, state.tipos, refreshAll);
   buildChipGroup('fCliente', allClientes, state.clientes, refreshAll);
   buildChipGroup('fStatusGeo', allStatusGeo, state.statusGeo, refreshAll);
+  buildChipGroup('fStatusRodando', allStatusRodando, state.statusRodando, refreshAll);
   buildChipGroup('fControlador', allControladores, state.controladores, refreshAll);
 }
 document.getElementById('btnClear').addEventListener('click', ()=>{
@@ -765,6 +778,7 @@ document.getElementById('btnClear').addEventListener('click', ()=>{
   state.tipos = new Set(allTipos);
   state.clientes = new Set(allClientes);
   state.statusGeo = new Set(allStatusGeo);
+  state.statusRodando = new Set(allStatusRodando);
   state.controladores = new Set(allControladores);
   state.placas = new Set();
   state.fornecedores = new Set(allFornecedores);
@@ -794,6 +808,9 @@ function getFiltered(){
     if(!d.cliente && state.clientes.size < allClientes.length) return false;
     if(d.statusParadaGeo && !state.statusGeo.has(d.statusParadaGeo)) return false;
     if(!d.statusParadaGeo && state.statusGeo.size < allStatusGeo.length) return false;
+    const sr = normStatusRodando(d.statusParadoRodando);
+    if(sr && !state.statusRodando.has(sr)) return false;
+    if(!sr && state.statusRodando.size < allStatusRodando.length) return false;
     if(d.controlador && !state.controladores.has(d.controlador)) return false;
     if(!d.controlador && state.controladores.size < allControladores.length) return false;
     if(state.placas.size>0 && !state.placas.has(d.placa)) return false;
@@ -1495,6 +1512,7 @@ function applyNewData(newRecords, fileName){
   state.tipos = new Set(allTipos);
   state.clientes = new Set(allClientes);
   state.statusGeo = new Set(allStatusGeo);
+  state.statusRodando = new Set(allStatusRodando);
   state.controladores = new Set(allControladores);
   state.placas = new Set();
   state.fornecedores = new Set(allFornecedores);
@@ -1558,6 +1576,7 @@ function refreshAll(){
   if(state.tipos.size < allTipos.length) activeCountParts.push(state.tipos.size+' tipo(s) de manutenção');
   if(state.clientes.size < allClientes.length) activeCountParts.push(state.clientes.size+' cliente(s)');
   if(state.statusGeo.size < allStatusGeo.length) activeCountParts.push(state.statusGeo.size+' status GEO');
+  if(state.statusRodando.size < allStatusRodando.length) activeCountParts.push(state.statusRodando.size+' status parado/rodando');
   if(state.controladores.size < allControladores.length) activeCountParts.push(state.controladores.size+' controlador(es)');
   if(state.placas.size>0) activeCountParts.push(state.placas.size+' placa(s)');
   if(state.fornecedores.size < allFornecedores.length) activeCountParts.push(state.fornecedores.size+' fornecedor(es)');
@@ -1598,6 +1617,7 @@ async function loadOnlineData(){
     state.tipos = new Set(allTipos);
     state.clientes = new Set(allClientes);
     state.statusGeo = new Set(allStatusGeo);
+    state.statusRodando = new Set(allStatusRodando);
     state.controladores = new Set(allControladores);
     state.placas = new Set();
     state.fornecedores = new Set(allFornecedores);
