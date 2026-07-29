@@ -36,7 +36,6 @@
   }
   a{color:inherit;}
 
-  /* ---------- Header ---------- */
   header.top{
     background:linear-gradient(120deg,var(--navy) 0%,var(--navy-3) 65%,var(--navy-2) 100%);
     color:var(--white);
@@ -79,10 +78,8 @@
   .meta-chip b{ display:block; font-size:16px; font-weight:700; color:var(--white); }
   .meta-chip span{ font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:rgba(255,255,255,.6); }
 
-  /* ---------- Layout ---------- */
   .container{ max-width:1440px; margin:0 auto; padding:20px 28px 60px; }
 
-  /* ---------- Upload / Update data ---------- */
   .upload-card{
     background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
     padding:14px 18px; margin:-30px 0 16px; position:relative; z-index:6;
@@ -115,7 +112,6 @@
   .upload-msg.err{ color:var(--red); }
   .upload-msg.loading{ color:var(--amber); }
 
-  /* ---------- Filters ---------- */
   .filters{
     background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow);
     padding:16px 18px; margin:0 0 20px; position:relative; z-index:5;
@@ -161,7 +157,6 @@
   .placa-suggest div{ padding:8px 12px; font-size:13px; cursor:pointer; }
   .placa-suggest div:hover{ background:var(--gray-100); }
 
-  /* ---------- Dropdown multi-select ---------- */
   .dropdown-box{ position:relative; }
   .dropdown-toggle{
     width:100%; text-align:left; padding:8px 10px; border:1px solid var(--gray-200); border-radius:8px;
@@ -202,7 +197,6 @@
     font-size:11px; color:var(--gray-400); margin-top:8px;
   }
 
-  /* ---------- Tabs ---------- */
   .tabs{ display:flex; gap:4px; border-bottom:1px solid var(--gray-200); margin-bottom:20px; overflow-x:auto; }
   .tab-btn{
     background:none; border:none; padding:11px 18px; font-size:13.5px; font-weight:700;
@@ -217,7 +211,6 @@
   .tab-panel.active{ display:block; }
   @keyframes fadein{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
 
-  /* ---------- KPIs ---------- */
   .kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:20px; }
   .kpi-card{
     background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 18px;
@@ -231,7 +224,6 @@
   .kpi-card.c-navy{ border-left-color:var(--navy); }
   .kpi-card.c-purple{ border-left-color:var(--purple); }
 
-  /* ---------- Charts ---------- */
   .grid2{ display:grid; grid-template-columns:1.4fr 1fr; gap:16px; margin-bottom:16px; }
   .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
   .grid2b{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
@@ -247,7 +239,6 @@
   .legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--gray-600); font-weight:600; }
   .legend-dot{ width:9px;height:9px;border-radius:50%; flex:none; }
 
-  /* ---------- Table ---------- */
   .table-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; gap:10px; flex-wrap:wrap; }
   .table-toolbar .count{ font-size:12.5px; color:var(--gray-600); font-weight:600; }
   .btn-export{
@@ -309,7 +300,6 @@
 
 <div class="container">
 
-  <!-- UPLOAD / UPDATE DATA -->
   <div class="upload-card">
     <div class="upload-row">
       <div class="upload-text">
@@ -327,7 +317,6 @@
     <div class="upload-msg" id="uploadMsg"></div>
   </div>
 
-  <!-- FILTERS -->
   <div class="filters">
     <div class="filters-grid">
       <div class="filter-block">
@@ -382,7 +371,6 @@
     <div class="active-count" id="activeCount"></div>
   </div>
 
-  <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn active" data-tab="visao">Visão Geral</button>
     <button class="tab-btn" data-tab="pareto">Pareto &amp; Tempos</button>
@@ -391,7 +379,6 @@
     <button class="tab-btn" data-tab="detalhe">Detalhamento</button>
   </div>
 
-  <!-- TAB: VISÃO GERAL -->
   <div class="tab-panel active" id="tab-visao">
     <div class="kpi-grid" id="kpiGrid"></div>
     <div class="grid2">
@@ -424,7 +411,6 @@
     </div>
   </div>
 
-  <!-- TAB: PARETO & TEMPOS -->
   <div class="tab-panel" id="tab-pareto">
     <div class="grid2">
       <div class="card">
@@ -464,7 +450,6 @@
     </div>
   </div>
 
-  <!-- TAB: FROTA / CLIENTE / FORNECEDORES -->
   <div class="tab-panel" id="tab-frota">
     <div class="grid2b">
       <div class="card">
@@ -492,7 +477,6 @@
     </div>
   </div>
 
-  <!-- TAB: VEÍCULOS PARADOS EM OFICINA -->
   <div class="tab-panel" id="tab-parados">
     <div class="kpi-grid" id="kpiParados" style="margin-bottom:20px"></div>
     <div class="grid2" style="margin-bottom:16px">
@@ -532,7 +516,6 @@
     </div>
   </div>
 
-  <!-- TAB: DETALHE -->
   <div class="tab-panel" id="tab-detalhe">
     <div class="table-toolbar">
       <div class="count" id="tableCount">–</div>
@@ -567,32 +550,33 @@
 
 <script>
 // ============================================================
-// URL DA PLANILHA ONLINE (GOOGLE SHEETS) — JÁ CONFIGURADA
+// URL DA PLANILHA ONLINE (GOOGLE SHEETS)
 // ============================================================
 const ONLINE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQlvl-KnpcmszvVp_pN-w3R-R1ZS8-snBHvjQRApxB-JHgS5gIkEI6Vja3-nwnTkd1T8hQ3IC6DxFsF/pub?output=csv';
 
 // ============================================================
-// DADOS ESTÁTICOS (FALLBACK) — use um único registro de exemplo
-// Na prática, mantenha aqui a lista completa que você já tinha.
+// DADOS ESTÁTICOS (FALLBACK)
 // ============================================================
-const STATIC_DATA = []; // você pode deixar vazio ou colocar dados de exemplo
+const STATIC_DATA = [];
 
 // ============================================================
-// VARIÁVEL GLOBAL DE DADOS (será preenchida dinamicamente)
+// VARIÁVEL GLOBAL
 // ============================================================
 let DATA = [];
 
 // ============================================================
-// HELPERS E FUNÇÕES DE PROCESSAMENTO (MANTIDAS DO CÓDIGO ORIGINAL)
+// HELPERS E FUNÇÕES DE PROCESSAMENTO
 // ============================================================
 const fmtInt = n => (n==null||isNaN(n)) ? '—' : Math.round(n).toLocaleString('pt-BR');
 const fmtDec = (n,d=1) => (n==null||isNaN(n)) ? '—' : n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
 const fmtPct = (n,d=1) => (n==null||isNaN(n)) ? '—' : n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
+
 function fmtDate(iso){
   if(!iso) return '—';
   const d = new Date(iso);
   return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 }
+
 function monthKey(iso){
   if(!iso) return null;
   const d = new Date(iso);
@@ -1368,7 +1352,7 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
 });
 
 // ============================================================
-// UPLOAD MANUAL (MANTIDO COMO FALLBACK)
+// MAPEAMENTO DE COLUNAS
 // ============================================================
 const SHEET_COLMAP = {
   placa: 'PLACA',
@@ -1402,6 +1386,7 @@ const SHEET_COLMAP = {
   agingTotal: 'AGING TOTAL',
   glosa: 'ACOMP. GLOSA'
 };
+
 function normStr(v){
   if(v==null) return null;
   const s = String(v).trim().replace(/\s+/g,' ');
@@ -1420,6 +1405,10 @@ function numOrNull(v){
   const n = Number(s);
   return isNaN(n) ? null : n;
 }
+
+// ============================================================
+// FUNÇÃO CORRIGIDA DE PARSE DE DATA — RESPEITA PADRÃO BRASILEIRO
+// ============================================================
 function parseSheetDate(v){
   if(v==null) return null;
   if(v instanceof Date) return isNaN(v.getTime()) ? null : v;
@@ -1431,23 +1420,48 @@ function parseSheetDate(v){
     }catch(e){ return null; }
   }
   const s = String(v).trim();
+  if(!s) return null;
   const sl = s.toLowerCase();
-  if(!s || sl==='n/a' || sl==='#n/a' || sl==='-') return null;
-  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[T \-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if(sl==='n/a' || sl==='#n/a' || sl==='-') return null;
+
+  // Tenta capturar os componentes da data
+  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if(m){
-    let [,dd,mo,yyyy,hh,mi,ss] = m;
-    if(yyyy.length===2) yyyy = '20'+yyyy;
-    const dt = new Date(+yyyy, +mo-1, +dd, +(hh||0), +(mi||0), +(ss||0));
-    return isNaN(dt.getTime()) ? null : dt;
+    let [, a, b, y, hh, mi, ss] = m;
+    let year = parseInt(y, 10);
+    if(year < 100) year += 2000;
+    let h = parseInt(hh||0, 10), min = parseInt(mi||0, 10), sec = parseInt(ss||0, 10);
+
+    let d1 = parseInt(a, 10), d2 = parseInt(b, 10);
+
+    // Estratégia: primeiro tenta DD/MM/YYYY (padrão brasileiro)
+    if(d1 >= 1 && d1 <= 31 && d2 >= 1 && d2 <= 12){
+      const dt = new Date(year, d2-1, d1, h, min, sec);
+      if(!isNaN(dt.getTime())) return dt;
+    }
+    // Depois tenta MM/DD/YYYY (formato americano) — para casos onde o Google Sheets exportou assim
+    if(d1 >= 1 && d1 <= 12 && d2 >= 1 && d2 <= 31){
+      const dt = new Date(year, d1-1, d2, h, min, sec);
+      if(!isNaN(dt.getTime())) return dt;
+    }
+    // Fallback: tenta interpretar como DD/MM/YYYY com mês e dia invertidos (última tentativa)
+    if(d2 >= 1 && d2 <= 12 && d1 >= 1 && d1 <= 31){
+      const dt = new Date(year, d2-1, d1, h, min, sec);
+      if(!isNaN(dt.getTime())) return dt;
+    }
   }
+
+  // Fallback: deixa o navegador tentar
   const d2 = new Date(s);
   return isNaN(d2.getTime()) ? null : d2;
 }
+
 function toISO(d){
   if(!d) return null;
   const pad = n=>String(n).padStart(2,'0');
   return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
 }
+
 function rowToRecord(row){
   const g = key => row[SHEET_COLMAP[key]];
   const dtParada = parseSheetDate(g('dtParadaOficina'));
@@ -1494,6 +1508,7 @@ function rowToRecord(row){
     duracaoDias: dur
   };
 }
+
 function showUploadMsg(msg, isError, isLoading){
   const el = document.getElementById('uploadMsg');
   el.textContent = msg;
@@ -1600,7 +1615,6 @@ async function loadOnlineData(){
     const response = await fetch(url);
     if(!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
     const text = await response.text();
-    // Converte CSV para array de objetos usando XLSX
     const wb = XLSX.read(text, {type:'string'});
     const sheetName = wb.SheetNames[0];
     const ws = wb.Sheets[sheetName];
@@ -1639,7 +1653,6 @@ async function loadOnlineData(){
 // INICIALIZAÇÃO
 // ============================================================
 async function init(){
-  // Carrega dados estáticos (fallback)
   DATA.splice(0, DATA.length, ...STATIC_DATA);
   computeOptions();
   computeDateBounds();
@@ -1650,7 +1663,6 @@ async function init(){
   initFornecedorDropdown();
   initUploadUI();
 
-  // Se houver URL configurada, tenta carregar online
   if(ONLINE_SHEET_URL.trim()){
     await loadOnlineData();
   } else {
