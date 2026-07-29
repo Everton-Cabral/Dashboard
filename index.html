@@ -1407,7 +1407,7 @@ function numOrNull(v){
 }
 
 // ============================================================
-// FUNÇÃO CORRIGIDA DE PARSE DE DATA — RESPEITA PADRÃO BRASILEIRO
+// FUNÇÃO DE PARSE DE DATA — RESPEITA PADRÃO BRASILEIRO
 // ============================================================
 function parseSheetDate(v){
   if(v==null) return null;
@@ -1424,7 +1424,7 @@ function parseSheetDate(v){
   const sl = s.toLowerCase();
   if(sl==='n/a' || sl==='#n/a' || sl==='-') return null;
 
-  // Tenta capturar os componentes da data
+  // Extrai componentes: tentar capturar dia/mês/ano e hora
   let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if(m){
     let [, a, b, y, hh, mi, ss] = m;
@@ -1434,26 +1434,32 @@ function parseSheetDate(v){
 
     let d1 = parseInt(a, 10), d2 = parseInt(b, 10);
 
-    // Estratégia: primeiro tenta DD/MM/YYYY (padrão brasileiro)
+    // Estratégia: primeiro tenta DD/MM/YYYY (brasileiro)
     if(d1 >= 1 && d1 <= 31 && d2 >= 1 && d2 <= 12){
       const dt = new Date(year, d2-1, d1, h, min, sec);
-      if(!isNaN(dt.getTime())) return dt;
+      if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d2-1 && dt.getDate() === d1) {
+        return dt;
+      }
     }
-    // Depois tenta MM/DD/YYYY (formato americano) — para casos onde o Google Sheets exportou assim
+    // Se falhar, tenta MM/DD/YYYY (americano)
     if(d1 >= 1 && d1 <= 12 && d2 >= 1 && d2 <= 31){
       const dt = new Date(year, d1-1, d2, h, min, sec);
-      if(!isNaN(dt.getTime())) return dt;
+      if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d1-1 && dt.getDate() === d2) {
+        return dt;
+      }
     }
-    // Fallback: tenta interpretar como DD/MM/YYYY com mês e dia invertidos (última tentativa)
+    // Fallback: tenta interpretar como DD/MM com mês e dia invertidos (último recurso)
     if(d2 >= 1 && d2 <= 12 && d1 >= 1 && d1 <= 31){
       const dt = new Date(year, d2-1, d1, h, min, sec);
       if(!isNaN(dt.getTime())) return dt;
     }
   }
 
-  // Fallback: deixa o navegador tentar
+  // Tentar interpretar outros formatos comuns (ex: "2023-12-31")
   const d2 = new Date(s);
-  return isNaN(d2.getTime()) ? null : d2;
+  if(!isNaN(d2.getTime())) return d2;
+
+  return null;
 }
 
 function toISO(d){
