@@ -1418,7 +1418,7 @@ function parseSheetDate(v){
     try{
       const d = XLSX.SSF.parse_date_code(v);
       if(!d) return null;
-      // d.m é zero‑based (0 = Janeiro)
+      // d.m é zero‑based (0 = Janeiro) – NÃO subtraia!
       return new Date(d.y, d.m, d.d, d.H||0, d.M||0, Math.round(d.S||0));
     }catch(e){ return null; }
   }
@@ -1442,14 +1442,14 @@ function parseSheetDate(v){
     if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d2-1 && dt.getDate() === d1){
       return dt;
     }
-    // 2) Se falhar, tentar MM/DD (dia = d2, mês = d1)
+    // 2) Se falhar, tentar MM/DD (dia = d2, mês = d1) – apenas como fallback
     dt = new Date(year, d1-1, d2, h, min, sec);
     if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d1-1 && dt.getDate() === d2){
       return dt;
     }
   }
 
-  // Fallback: tentar interpretação nativa
+  // Fallback: tentar interpretação nativa (ex: "2023-12-31")
   const d2 = new Date(s);
   return isNaN(d2.getTime()) ? null : d2;
 }
