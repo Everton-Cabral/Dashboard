@@ -1407,11 +1407,10 @@ function numOrNull(v){
 }
 
 // ============================================================
-// FUNÇÃO DE PARSE DE DATA – CORRIGIDA E ROBUSTA
+// FUNÇÃO DE PARSE DE DATA – CORRIGIDA (PRIORIZA DD/MM/AAAA)
 // ============================================================
 function parseSheetDate(v){
   if(v==null) return null;
-  // Se já for Date, retorna
   if(v instanceof Date) return isNaN(v.getTime()) ? null : v;
 
   // Número serial do Excel
@@ -1419,7 +1418,7 @@ function parseSheetDate(v){
     try{
       const d = XLSX.SSF.parse_date_code(v);
       if(!d) return null;
-      // d.m é zero-based (0 = Janeiro)
+      // d.m é zero‑based (0 = Janeiro)
       return new Date(d.y, d.m, d.d, d.H||0, d.M||0, Math.round(d.S||0));
     }catch(e){ return null; }
   }
@@ -1429,7 +1428,7 @@ function parseSheetDate(v){
   const sl = s.toLowerCase();
   if(sl==='n/a' || sl==='#n/a' || sl==='-') return null;
 
-  // Tenta capturar componentes: dd/mm/aaaa (com hora opcional)
+  // Tenta capturar componentes: dd/mm/aaaa (ou dd/mm/aa) com hora opcional
   let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if(m){
     let [, a, b, y, hh, mi, ss] = m;
@@ -1438,32 +1437,19 @@ function parseSheetDate(v){
     let h = parseInt(hh||0, 10), min = parseInt(mi||0, 10), sec = parseInt(ss||0, 10);
     let d1 = parseInt(a, 10), d2 = parseInt(b, 10);
 
-    // Função auxiliar para validar data
-    function validDate(day, month, year) {
-      const dt = new Date(year, month-1, day, h, min, sec);
-      return !isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === month-1 && dt.getDate() === day;
+    // 1) Tentar DD/MM (dia = d1, mês = d2)
+    let dt = new Date(year, d2-1, d1, h, min, sec);
+    if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d2-1 && dt.getDate() === d1){
+      return dt;
     }
-
-    // Inferir formato:
-    // Se d1 > 12 -> d1 é dia, d2 é mês (DD/MM)
-    // Se d2 > 12 -> d1 é mês, d2 é dia (MM/DD)
-    // Se ambos <= 12 -> tentar DD/MM primeiro, se falhar, MM/DD
-    let dt = null;
-    if(d1 > 12 && d2 <= 12) {
-      // DD/MM
-      if(validDate(d1, d2, year)) dt = new Date(year, d2-1, d1, h, min, sec);
-    } else if(d2 > 12 && d1 <= 12) {
-      // MM/DD
-      if(validDate(d2, d1, year)) dt = new Date(year, d1-1, d2, h, min, sec);
-    } else {
-      // Ambos <= 12, tentar DD/MM primeiro
-      if(validDate(d1, d2, year)) dt = new Date(year, d2-1, d1, h, min, sec);
-      else if(validDate(d2, d1, year)) dt = new Date(year, d1-1, d2, h, min, sec);
+    // 2) Se falhar, tentar MM/DD (dia = d2, mês = d1)
+    dt = new Date(year, d1-1, d2, h, min, sec);
+    if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d1-1 && dt.getDate() === d2){
+      return dt;
     }
-    if(dt) return dt;
   }
 
-  // Fallback: tentar interpretar como ISO (ex: "2023-12-31")
+  // Fallback: tentar interpretação nativa
   const d2 = new Date(s);
   return isNaN(d2.getTime()) ? null : d2;
 }
