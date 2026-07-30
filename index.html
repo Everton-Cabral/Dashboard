@@ -1614,7 +1614,7 @@ async function loadOnlineData(){
     if(!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
     const text = await response.text();
     // Converte CSV para array de objetos usando XLSX
-    const wb = XLSX.read(text, {type:'string', cellDates:false, raw:false});
+    const wb = XLSX.read(text, {type:'string', cellDates:false, raw:true});
     const sheetName = wb.SheetNames[0];
     const ws = wb.Sheets[sheetName];
     const rows = XLSX.utils.sheet_to_json(ws, {defval:null, raw:true});
