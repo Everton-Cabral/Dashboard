@@ -1422,7 +1422,11 @@ function numOrNull(v){
 }
 function parseSheetDate(v){
   if(v==null) return null;
+  
+  // Se já for um objeto Date válido, retorna
   if(v instanceof Date) return isNaN(v.getTime()) ? null : v;
+  
+  // Se for um número (timestamp do Excel), converte
   if(typeof v === 'number'){
     try{
       const d = XLSX.SSF.parse_date_code(v);
@@ -1430,18 +1434,28 @@ function parseSheetDate(v){
       return new Date(d.y, d.m-1, d.d, d.H||0, d.M||0, Math.round(d.S||0));
     }catch(e){ return null; }
   }
+  
+  // Converte para string e normaliza
   const s = String(v).trim();
   const sl = s.toLowerCase();
   if(!s || sl==='n/a' || sl==='#n/a' || sl==='-') return null;
-  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[T \-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  
+  // 🔧 CORREÇÃO: FORÇA O FORMATO BR (DD/MM/YYYY) PRIMEIRO
+  // Tenta capturar DD/MM/YYYY ou DD/MM/YYYY HH:MM:SS
+  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if(m){
     let [,dd,mo,yyyy,hh,mi,ss] = m;
-    if(yyyy.length===2) yyyy = '20'+yyyy;
+    if(yyyy.length===2) yyyy = '20'+yyyy; // Assume século 21 para anos com 2 dígitos
+    // Cria a data com dia, mês e ano no formato BR
     const dt = new Date(+yyyy, +mo-1, +dd, +(hh||0), +(mi||0), +(ss||0));
-    return isNaN(dt.getTime()) ? null : dt;
+    if(!isNaN(dt.getTime())) return dt;
   }
+  
+  // Fallback: tenta outros formatos (ex: YYYY-MM-DD)
   const d2 = new Date(s);
-  return isNaN(d2.getTime()) ? null : d2;
+  if(!isNaN(d2.getTime())) return d2;
+  
+  return null;
 }
 function toISO(d){
   if(!d) return null;
