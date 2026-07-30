@@ -550,33 +550,32 @@
 
 <script>
 // ============================================================
-// URL DA PLANILHA ONLINE (GOOGLE SHEETS)
+// URL DA PLANILHA ONLINE (GOOGLE SHEETS) — JÁ CONFIGURADA
 // ============================================================
 const ONLINE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQlvl-KnpcmszvVp_pN-w3R-R1ZS8-snBHvjQRApxB-JHgS5gIkEI6Vja3-nwnTkd1T8hQ3IC6DxFsF/pub?output=csv';
 
 // ============================================================
-// DADOS ESTÁTICOS (FALLBACK)
+// DADOS ESTÁTICOS (FALLBACK) — use um único registro de exemplo
+// Na prática, mantenha aqui a lista completa que você já tinha.
 // ============================================================
-const STATIC_DATA = [];
+const STATIC_DATA = []; // você pode deixar vazio ou colocar dados de exemplo
 
 // ============================================================
-// VARIÁVEL GLOBAL
+// VARIÁVEL GLOBAL DE DADOS (será preenchida dinamicamente)
 // ============================================================
 let DATA = [];
 
 // ============================================================
-// HELPERS E FUNÇÕES DE PROCESSAMENTO
+// HELPERS E FUNÇÕES DE PROCESSAMENTO (MANTIDAS DO CÓDIGO ORIGINAL)
 // ============================================================
 const fmtInt = n => (n==null||isNaN(n)) ? '—' : Math.round(n).toLocaleString('pt-BR');
 const fmtDec = (n,d=1) => (n==null||isNaN(n)) ? '—' : n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
 const fmtPct = (n,d=1) => (n==null||isNaN(n)) ? '—' : n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
-
 function fmtDate(iso){
   if(!iso) return '—';
   const d = new Date(iso);
   return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
 }
-
 function monthKey(iso){
   if(!iso) return null;
   const d = new Date(iso);
@@ -1352,7 +1351,7 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
 });
 
 // ============================================================
-// MAPEAMENTO DE COLUNAS
+// UPLOAD MANUAL (MANTIDO COMO FALLBACK)
 // ============================================================
 const SHEET_COLMAP = {
   placa: 'PLACA',
@@ -1386,7 +1385,6 @@ const SHEET_COLMAP = {
   agingTotal: 'AGING TOTAL',
   glosa: 'ACOMP. GLOSA'
 };
-
 function normStr(v){
   if(v==null) return null;
   const s = String(v).trim().replace(/\s+/g,' ');
@@ -1405,20 +1403,18 @@ function numOrNull(v){
   const n = Number(s);
   return isNaN(n) ? null : n;
 }
-
 // ============================================================
-// FUNÇÃO DE PARSE DE DATA – CORRIGIDA (PRIORIZA DD/MM/AAAA)
+// FUNÇÃO DE PARSE DE DATA CORRIGIDA
 // ============================================================
 function parseSheetDate(v){
   if(v==null) return null;
   if(v instanceof Date) return isNaN(v.getTime()) ? null : v;
 
-  // Número serial do Excel
+  // Número serial do Excel (d.m já é zero-based, NÃO subtrair)
   if(typeof v === 'number'){
     try{
       const d = XLSX.SSF.parse_date_code(v);
       if(!d) return null;
-      // d.m é zero‑based (0 = Janeiro) – NÃO subtraia!
       return new Date(d.y, d.m, d.d, d.H||0, d.M||0, Math.round(d.S||0));
     }catch(e){ return null; }
   }
@@ -1428,8 +1424,9 @@ function parseSheetDate(v){
   const sl = s.toLowerCase();
   if(sl==='n/a' || sl==='#n/a' || sl==='-') return null;
 
-  // Tenta capturar componentes: dd/mm/aaaa (ou dd/mm/aa) com hora opcional
-  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  // Tenta capturar formato dd/mm/aaaa (com ou sem hora)
+  const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/;
+  const m = s.match(regex);
   if(m){
     let [, a, b, y, hh, mi, ss] = m;
     let year = parseInt(y, 10);
@@ -1437,29 +1434,27 @@ function parseSheetDate(v){
     let h = parseInt(hh||0, 10), min = parseInt(mi||0, 10), sec = parseInt(ss||0, 10);
     let d1 = parseInt(a, 10), d2 = parseInt(b, 10);
 
-    // 1) Tentar DD/MM (dia = d1, mês = d2)
+    // 1) Tenta DD/MM (dia = d1, mês = d2)
     let dt = new Date(year, d2-1, d1, h, min, sec);
     if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d2-1 && dt.getDate() === d1){
       return dt;
     }
-    // 2) Se falhar, tentar MM/DD (dia = d2, mês = d1) – apenas como fallback
+    // 2) Se falhar, tenta MM/DD (dia = d2, mês = d1) – fallback
     dt = new Date(year, d1-1, d2, h, min, sec);
     if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d1-1 && dt.getDate() === d2){
       return dt;
     }
   }
 
-  // Fallback: tentar interpretação nativa (ex: "2023-12-31")
+  // Fallback: tentar interpretar como ISO (ex: "2023-12-31")
   const d2 = new Date(s);
   return isNaN(d2.getTime()) ? null : d2;
 }
-
 function toISO(d){
   if(!d) return null;
   const pad = n=>String(n).padStart(2,'0');
   return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
 }
-
 function rowToRecord(row){
   const g = key => row[SHEET_COLMAP[key]];
   const dtParada = parseSheetDate(g('dtParadaOficina'));
@@ -1506,7 +1501,6 @@ function rowToRecord(row){
     duracaoDias: dur
   };
 }
-
 function showUploadMsg(msg, isError, isLoading){
   const el = document.getElementById('uploadMsg');
   el.textContent = msg;
@@ -1613,6 +1607,7 @@ async function loadOnlineData(){
     const response = await fetch(url);
     if(!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
     const text = await response.text();
+    // Converte CSV para array de objetos usando XLSX
     const wb = XLSX.read(text, {type:'string'});
     const sheetName = wb.SheetNames[0];
     const ws = wb.Sheets[sheetName];
@@ -1651,6 +1646,7 @@ async function loadOnlineData(){
 // INICIALIZAÇÃO
 // ============================================================
 async function init(){
+  // Carrega dados estáticos (fallback)
   DATA.splice(0, DATA.length, ...STATIC_DATA);
   computeOptions();
   computeDateBounds();
@@ -1661,6 +1657,7 @@ async function init(){
   initFornecedorDropdown();
   initUploadUI();
 
+  // Se houver URL configurada, tenta carregar online
   if(ONLINE_SHEET_URL.trim()){
     await loadOnlineData();
   } else {
