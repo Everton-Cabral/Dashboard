@@ -555,18 +555,17 @@
 const ONLINE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQlvl-KnpcmszvVp_pN-w3R-R1ZS8-snBHvjQRApxB-JHgS5gIkEI6Vja3-nwnTkd1T8hQ3IC6DxFsF/pub?output=csv';
 
 // ============================================================
-// DADOS ESTÁTICOS (FALLBACK) — use um único registro de exemplo
-// Na prática, mantenha aqui a lista completa que você já tinha.
+// DADOS ESTÁTICOS (FALLBACK)
 // ============================================================
-const STATIC_DATA = []; // você pode deixar vazio ou colocar dados de exemplo
+const STATIC_DATA = [];
 
 // ============================================================
-// VARIÁVEL GLOBAL DE DADOS (será preenchida dinamicamente)
+// VARIÁVEL GLOBAL
 // ============================================================
 let DATA = [];
 
 // ============================================================
-// HELPERS E FUNÇÕES DE PROCESSAMENTO (MANTIDAS DO CÓDIGO ORIGINAL)
+// HELPERS E FUNÇÕES DE PROCESSAMENTO
 // ============================================================
 const fmtInt = n => (n==null||isNaN(n)) ? '—' : Math.round(n).toLocaleString('pt-BR');
 const fmtDec = (n,d=1) => (n==null||isNaN(n)) ? '—' : n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -1405,6 +1404,7 @@ function numOrNull(v){
 }
 // ============================================================
 // FUNÇÃO DE PARSE DE DATA CORRIGIDA
+// FORÇA INTERPRETAÇÃO DD/MM/AAAA
 // ============================================================
 function parseSheetDate(v){
   if(v==null) return null;
@@ -1424,7 +1424,7 @@ function parseSheetDate(v){
   const sl = s.toLowerCase();
   if(sl==='n/a' || sl==='#n/a' || sl==='-') return null;
 
-  // Tenta capturar formato dd/mm/aaaa (com ou sem hora)
+  // Expressão regular para capturar dd/mm/aaaa ou dd/mm/aa com ou sem hora
   const regex = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/;
   const m = s.match(regex);
   if(m){
@@ -1434,12 +1434,13 @@ function parseSheetDate(v){
     let h = parseInt(hh||0, 10), min = parseInt(mi||0, 10), sec = parseInt(ss||0, 10);
     let d1 = parseInt(a, 10), d2 = parseInt(b, 10);
 
-    // 1) Tenta DD/MM (dia = d1, mês = d2)
+    // FORÇA DD/MM: dia = d1, mês = d2
     let dt = new Date(year, d2-1, d1, h, min, sec);
+    // Verifica se a data é válida e consistente
     if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d2-1 && dt.getDate() === d1){
       return dt;
     }
-    // 2) Se falhar, tenta MM/DD (dia = d2, mês = d1) – fallback
+    // Fallback: tenta MM/DD apenas se DD/MM for inválido (ex: 31/02)
     dt = new Date(year, d1-1, d2, h, min, sec);
     if(!isNaN(dt.getTime()) && dt.getFullYear() === year && dt.getMonth() === d1-1 && dt.getDate() === d2){
       return dt;
