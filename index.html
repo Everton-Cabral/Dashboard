@@ -1422,11 +1422,13 @@ function numOrNull(v){
 }
 function parseSheetDate(v){
   if(v==null) return null;
-  
-  // Se já for um objeto Date válido, retorna
-  if(v instanceof Date) return isNaN(v.getTime()) ? null : v;
-  
-  // Se for um número (timestamp do Excel), converte
+  // NÃO confiar em Date vindo do XLSX (ele pode ter parseado como MM/DD)
+  // Se receber Date, tenta extrair componentes e recriar — mas preferimos string
+  if(v instanceof Date){
+    if(isNaN(v.getTime())) return null;
+    // Mantém o Date apenas se veio de número serial do Excel (já tratado abaixo)
+    return v;
+  }
   if(typeof v === 'number'){
     try{
       const d = XLSX.SSF.parse_date_code(v);
@@ -1434,28 +1436,30 @@ function parseSheetDate(v){
       return new Date(d.y, d.m-1, d.d, d.H||0, d.M||0, Math.round(d.S||0));
     }catch(e){ return null; }
   }
-  
-  // Converte para string e normaliza
   const s = String(v).trim();
   const sl = s.toLowerCase();
   if(!s || sl==='n/a' || sl==='#n/a' || sl==='-') return null;
-  
-  // 🔧 CORREÇÃO: FORÇA O FORMATO BR (DD/MM/YYYY) PRIMEIRO
-  // Tenta capturar DD/MM/YYYY ou DD/MM/YYYY HH:MM:SS
-  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})(?:[ T\-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+ 
+  // 1) ISO YYYY-MM-DD (com ou sem hora)
+  let m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+  if(m){
+    const [,yyyy,mo,dd,hh,mi,ss] = m;
+    const dt = new Date(+yyyy, +mo-1, +dd, +(hh||0), +(mi||0), +(ss||0));
+    return isNaN(dt.getTime()) ? null : dt;
+  }
+ 
+  // 2) DD/MM/YYYY ou DD-MM-YYYY ou DD.MM.YYYY  ← SEMPRE formato brasileiro
+  m = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})(?:[T \-](\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if(m){
     let [,dd,mo,yyyy,hh,mi,ss] = m;
-    if(yyyy.length===2) yyyy = '20'+yyyy; // Assume século 21 para anos com 2 dígitos
-    // Cria a data com dia, mês e ano no formato BR
+    if(yyyy.length===2) yyyy = '20'+yyyy;
     const dt = new Date(+yyyy, +mo-1, +dd, +(hh||0), +(mi||0), +(ss||0));
-    if(!isNaN(dt.getTime())) return dt;
+    return isNaN(dt.getTime()) ? null : dt;
   }
-  
-  // Fallback: tenta outros formatos (ex: YYYY-MM-DD)
+ 
+  // 3) Último recurso
   const d2 = new Date(s);
-  if(!isNaN(d2.getTime())) return d2;
-  
-  return null;
+  return isNaN(d2.getTime()) ? null : d2;
 }
 function toISO(d){
   if(!d) return null;
@@ -1555,7 +1559,7 @@ function initUploadUI(){
     const reader = new FileReader();
     reader.onload = (e)=>{
       try{
-        const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+        const wb = XLSX.read(e.target.result, {type:'array', cellDates:false, raw:false});
         const sheetName = wb.SheetNames.includes('Planilha1') ? 'Planilha1' : wb.SheetNames[0];
         const ws = wb.Sheets[sheetName];
         const rows = XLSX.utils.sheet_to_json(ws, {defval:null});
@@ -1615,7 +1619,7 @@ async function loadOnlineData(){
     if(!response.ok) throw new Error(`HTTP ${response.status} - ${response.statusText}`);
     const text = await response.text();
     // Converte CSV para array de objetos usando XLSX
-    const wb = XLSX.read(text, {type:'string'});
+    const wb = XLSX.read(text, {type:'string', cellDates:false, raw:false});
     const sheetName = wb.SheetNames[0];
     const ws = wb.Sheets[sheetName];
     const rows = XLSX.utils.sheet_to_json(ws, {defval:null});
